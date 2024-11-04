@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://solcast.github.io/solcast_net/</loc>
+         <lastmod>2024-11-04</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast_net/aggregations/</loc>
+         <lastmod>2024-11-04</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast_net/forecast/</loc>
+         <lastmod>2024-11-04</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast_net/historic/</loc>
+         <lastmod>2024-11-04</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast_net/live/</loc>
+         <lastmod>2024-11-04</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast_net/pv_power_sites/</loc>
+         <lastmod>2024-11-04</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast_net/tmy/</loc>
+         <lastmod>2024-11-04</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast_net/notebooks/1.1%20Getting%20Data%20-%20Historic%20Solar%20Radiation/</loc>
+         <lastmod>2024-11-04</lastmod>
+    </url>
+</urlset>
