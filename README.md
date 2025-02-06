@@ -72,7 +72,7 @@ var response = await liveClient.GetRadiationAndWeather(
     format: "csv"
 );
 
-Console.WriteLine(response);
+Console.WriteLine(response.RawResponse);
 ```
 
 ### Retrieving Forecast Data
