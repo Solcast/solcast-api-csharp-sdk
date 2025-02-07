@@ -71,6 +71,7 @@ namespace Solcast.Clients
                     Console.WriteLine($@"A new version of the SDK is available: {latestVersionRaw}.
 To update, run the following command:
     dotnet add package Solcast --version {latestVersion}
+Disable this check by setting env variable SUPPRESS_SDK_UPDATE_CHECK='true'
 ");
                 }
             }
