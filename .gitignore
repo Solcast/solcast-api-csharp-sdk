@@ -7,3 +7,4 @@ TestResults/
 venv
 public/
 /tmp/
+.gitattributes
