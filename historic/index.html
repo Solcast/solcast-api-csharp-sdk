@@ -1,0 +1,823 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://solcast.github.io/solcast_net/historic/">
+      
+      
+        <link rel="prev" href="../live/">
+      
+      
+        <link rel="next" href="../tmy/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.45">
+    
+    
+      
+        <title>Historic - Solcast API C# SDK</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="yellow">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#historic-data-api" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Solcast API C# SDK" class="md-header__button md-logo" aria-label="Solcast API C# SDK" data-md-component="logo">
+      
+  <img src="../img/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Solcast API C# SDK
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Historic
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="/solcast-api-python-sdk/" hreflang="python" class="md-select__link">
+              Python
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="/solcast-api-csharp-sdk/" hreflang="csharp" class="md-select__link">
+              C#
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Solcast API C# SDK" class="md-nav__button md-logo" aria-label="Solcast API C# SDK" data-md-component="logo">
+      
+  <img src="../img/logo.png" alt="logo">
+
+    </a>
+    Solcast API C# SDK
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../forecast/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Forecast
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../live/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Live
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Historic
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Historic
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getradiationandweather" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetRadiationAndWeather
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getrooftoppvpower" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetRooftopPvPower
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getadvancedpvpower" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetAdvancedPvPower
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tmy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TMY
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pvpowersite/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PV Power Site
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aggregation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Aggregation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Example Notebooks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Example Notebooks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    1. Getting Data
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            1. Getting Data
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/1.1%20Getting%20Data%20-%20Historic%20Solar%20Radiation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1.1 Getting Data: Historic Solar Radiation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getradiationandweather" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetRadiationAndWeather
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getrooftoppvpower" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetRooftopPvPower
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getadvancedpvpower" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetAdvancedPvPower
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="historic-data-api">Historic Data API</h1>
+<p>Historical irradiance, weather and power data, from 2007 to 7 days ago at 1-2 km and 5 minutes resolution.</p>
+<hr />
+<p>The module HistoricClient has the following available methods:</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Purpose</th>
+<th>API Docs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#getradiationandweather">GetRadiationAndWeather</a></td>
+<td>Get historical irradiance and weather estimated actuals for up to 31 days of data at a time for a requested location, derived from satellite (clouds and irradiance over non-polar continental areas) and numerical weather models (other data). Data is available from 2007-01-01T00:00Z up to real-time estimated actuals.</td>
+<td><a class="md-button" href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850">details</a></td>
+</tr>
+<tr>
+<td><a href="#getrooftoppvpower">GetRooftopPvPower</a></td>
+<td>Get historical basic rooftop PV power estimated actuals for the requested location, derived from satellite (clouds and irradiance over non-polar continental areas) and numerical weather models (other data).          <strong>Attention hobbyist users</strong>          If you have a hobbyist user account please use the <a href="https://docs.solcast.com.au/#00577cf8-b43b-4349-b4b5-a5f063916f5a">Rooftop Sites (Hobbyist)</a> endpoints.</td>
+<td><a class="md-button" href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6">details</a></td>
+</tr>
+<tr>
+<td><a href="#getadvancedpvpower">GetAdvancedPvPower</a></td>
+<td>Get historical advanced PV power estimated actuals for the requested location, derived from satellite (clouds and irradiance over non-polar continental areas) and numerical weather models (other data).</td>
+<td><a class="md-button" href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881">details</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="getradiationandweather">GetRadiationAndWeather</h3>
+<p><strong>Parameters:</strong>
+<a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(string): ISO_8601 compliant starting datetime for the historical data. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed. (Required)">start</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(double?): The latitude of the location you request data for. Must be a decimal number between -90 and 90. (Required)">latitude</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(double?): The longitude of the location you request data for. Must be a decimal number between -180 and 180. (Required)">longitude</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(string): Must include one of end_date and duration. ISO_8601 compliant ending datetime for the historical data. Must be within 31 days of the start_date. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed. (Optional)">end</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(string): Must include one of end_date and duration. ISO_8601 compliant duration for the historical data. Must be within 31 days of the start_date. (Optional)">duration</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(string): Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset. (Optional)">timeZone</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(string): Length of the averaging period in ISO 8601 format. (Optional)">period</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(float?): The angle (degrees) that the PV system is tilted off the horizontal. A tilt of 0 means the system faces directly upwards, and 90 means the system is vertical and facing the horizon. If you don't specify tilt, we use a default tilt angle based on the latitude you specify in your request. Must be between 0 and 90. (Optional)">tilt</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(float?): The azimuth is defined as the angle (degrees) from true north that the PV system is facing. An azimuth of 0 means the system is facing true north. Positive values are anticlockwise, so azimuth is -90 for an east-facing system and 135 for a southwest-facing system. If you don't specify an azimuth, we use a default value of 0 (north facing) in the southern hemisphere and 180 (south-facing) in the northern hemisphere. (Optional)">azimuth</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(string): The type of sun-tracking or geometry configuration of your site's modules. (Optional)">arrayType</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(List&lt;string&gt;): The output parameters to include in the response. (Optional)">outputParameters</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(bool?): If true, irradiance parameters are modified based on the surrounding terrain from a 90m-horizontal-resolution digital elevation model. The direct component of irradiance is set to zero when the beam from the sun is blocked by the terrain. The diffuse component of irradiance is reduced throughout the day if the sky view at the location is significantly reduced by the surrounding terrain. Global irradiance incorporates both effects. (Optional)">terrainShading</a>, <a href="https://docs.solcast.com.au/#f75aa7c6-b1ee-476c-9659-3bfb8bc7a850" title="(string): Response format (Optional)">format</a></p>
+<p><strong>Example Usage:</strong>
+<div class="language-csharp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">Solcast.Clients</span><span class="p">;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kt">var</span><span class="w"> </span><span class="n">historicClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HistoricClient</span><span class="p">();</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kt">var</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">historicClient</span><span class="p">.</span><span class="n">GetRadiationAndWeather</span><span class="p">(</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">start</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-06-01T06:00&quot;</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">latitude</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="m">33.856784</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">longitude</span><span class="p">:</span><span class="w"> </span><span class="m">151.215297</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="n">end</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-07-01T06:00&quot;</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="n">format</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;csv&quot;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">);</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">RawResponse</span><span class="p">);</span>
+</span></code></pre></div>
+<strong>Sample Output:</strong></p>
+<table>
+<thead>
+<tr>
+<th>air_temp</th>
+<th>dni</th>
+<th>ghi</th>
+<th>period_end</th>
+<th>period</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15</td>
+<td>0</td>
+<td>5</td>
+<td>2024-06-01T06:30:00+00:00</td>
+<td>PT30M</td>
+</tr>
+<tr>
+<td>15</td>
+<td>0</td>
+<td>1</td>
+<td>2024-06-01T07:00:00+00:00</td>
+<td>PT30M</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>13</td>
+<td>23</td>
+<td>112</td>
+<td>2024-07-01T05:30:00+00:00</td>
+<td>PT30M</td>
+</tr>
+<tr>
+<td>13</td>
+<td>0</td>
+<td>70</td>
+<td>2024-07-01T06:00:00+00:00</td>
+<td>PT30M</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="getrooftoppvpower">GetRooftopPvPower</h3>
+<p><strong>Parameters:</strong>
+<a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(string): ISO_8601 compliant starting datetime for the historical data. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed. (Required)">start</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(double?): The latitude of the location you request data for. Must be a decimal number between -90 and 90. (Required)">latitude</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(double?): The longitude of the location you request data for. Must be a decimal number between -180 and 180. (Required)">longitude</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(float?): The capacity of the inverter (AC) or the modules (DC), whichever is greater, in kilowatts (kW). (Required)">capacity</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(string): Must include one of end_date and duration. ISO_8601 compliant ending datetime for the historical data. Must be within 31 days of the start_date. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed. (Optional)">end</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(string): Must include one of end_date and duration. ISO_8601 compliant duration for the historical data. Must be within 31 days of the start_date. (Optional)">duration</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(string): Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset. (Optional)">timeZone</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(string): Length of the averaging period in ISO 8601 format. (Optional)">period</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(float?): The angle (degrees) that the PV system is tilted off the horizontal. A tilt of 0 means the system faces directly upwards, and 90 means the system is vertical and facing the horizon. If you don't specify tilt, we use a default tilt angle based on the latitude you specify in your request. Must be between 0 and 90. (Optional)">tilt</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(float?): The azimuth is defined as the angle (degrees) from true north that the PV system is facing. An azimuth of 0 means the system is facing true north. Positive values are anticlockwise, so azimuth is -90 for an east-facing system and 135 for a southwest-facing system. If you don't specify an azimuth, we use a default value of 0 (north facing) in the southern hemisphere and 180 (south-facing) in the northern hemisphere. (Optional)">azimuth</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(string): The date (yyyy-MM-dd) of installation of the PV system. We use this to estimate your loss_factor based on the ageing of your system. If you provide us with a loss_factor directly, we will ignore this date. (Optional)">installDate</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(float?): Default is 0.90 A factor to reduce your output forecast from the full capacity based on characteristics of the PV array or inverter. This is effectively the non-temperature loss effects on the nameplate rating of the PV system, including inefficiency and soiling. For a 1kW PV system anything that reduces 1000W/m2 solar radiation from producing 1000W of power output (assuming temperature is 25C). Valid values are between 0 and 1 (i.e. 0.6 equals 60%). If you specify 0.6 your returned power will be a maximum of 60% of AC capacity. (Optional)">lossFactor</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(List&lt;string&gt;): The output parameters to include in the response. (Optional)">outputParameters</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(bool?): If true, irradiance parameters are modified based on the surrounding terrain from a 90m-horizontal-resolution digital elevation model. The direct component of irradiance is set to zero when the beam from the sun is blocked by the terrain. The diffuse component of irradiance is reduced throughout the day if the sky view at the location is significantly reduced by the surrounding terrain. Global irradiance incorporates both effects. (Optional)">terrainShading</a>, <a href="https://docs.solcast.com.au/#a3218b9c-ce7f-4fdd-850d-5f1029ae75f6" title="(string): Response format (Optional)">format</a></p>
+<p><strong>Example Usage:</strong>
+<div class="language-csharp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">Solcast.Clients</span><span class="p">;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kt">var</span><span class="w"> </span><span class="n">historicClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HistoricClient</span><span class="p">();</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kt">var</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">historicClient</span><span class="p">.</span><span class="n">GetRooftopPvPower</span><span class="p">(</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">start</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-06-01T06:00&quot;</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">latitude</span><span class="p">:</span><span class="w"> </span><span class="o">-</span><span class="m">33.856784</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">longitude</span><span class="p">:</span><span class="w"> </span><span class="m">151.215297</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">capacity</span><span class="p">:</span><span class="w"> </span><span class="m">5.0f</span><span class="p">,</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">end</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-07-01T06:00&quot;</span><span class="p">,</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="n">format</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;csv&quot;</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">);</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">RawResponse</span><span class="p">);</span>
+</span></code></pre></div>
+<strong>Sample Output:</strong></p>
+<table>
+<thead>
+<tr>
+<th>pv_power_rooftop</th>
+<th>period_end</th>
+<th>period</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>2024-06-01T06:30:00+00:00</td>
+<td>PT30M</td>
+</tr>
+<tr>
+<td>0</td>
+<td>2024-06-01T07:00:00+00:00</td>
+<td>PT30M</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>0.439</td>
+<td>2024-07-01T05:30:00+00:00</td>
+<td>PT30M</td>
+</tr>
+<tr>
+<td>0.212</td>
+<td>2024-07-01T06:00:00+00:00</td>
+<td>PT30M</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="getadvancedpvpower">GetAdvancedPvPower</h3>
+<p><strong>Parameters:</strong>
+<a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(string): ISO_8601 compliant starting datetime for the historical data. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed. (Required)">start</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(string): The resource id of the resource. (Required)">resourceId</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(string): Must include one of end_date and duration. ISO_8601 compliant ending datetime for the historical data. Must be within 31 days of the start_date. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed. (Optional)">end</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(string): Must include one of end_date and duration. ISO_8601 compliant duration for the historical data. Must be within 31 days of the start_date. (Optional)">duration</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(string): Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset. (Optional)">timeZone</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(List&lt;string&gt;): The output parameters to include in the response. (Optional)">outputParameters</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(string): Length of the averaging period in ISO 8601 format. (Optional)">period</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(double?): Percentage of the site’s total AC (inverter) capacity that is currently generating or expected to be generating during the forecast request period. E.g. if you specify a 50% availability, your returned power will be half of what it otherwise would be. (Optional)">applyAvailability</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(double?): Constraint on site’s total AC production, applied as a cap in the same way as the metadata parameter Site Export Limit. This will constrain all Solcast power values to be no higher than the apply_constraint value you specify. If you need an unconstrained forecast, you should not use this parameter. (Optional)">applyConstraint</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(double?): A user-override for dust_soiling_average. If you specify this parameter in your API call, we will replace the site's annual or monthly average dust soiling values with the value you specify in your API call.E.g. if you specify a 0.7 dust soiling, your returned power will be reduced by 70%. (Optional)">applyDustSoiling</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(double?): A user-override for Solcast’s dynamic snow soiling, which is based on global snow cover and weather forecast data, and changes from hour to hour. If you specify this parameter in your API call (e.g. if snow clearing has just been performed), we will replace the Solcast dynamic hour to hour value with the single value you specify. E.g. if you specify a 0.7 snow soiling, your returned power will be reduced by 70%. (Optional)">applySnowSoiling</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(bool?): Indicating if trackers are inactive. If True, panels are assumed all facing up (i.e. zero rotation). Only has effect if your site has a tracking_type that is not “fixed”. (Optional)">applyTrackerInactive</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(bool?): If true, irradiance parameters are modified based on the surrounding terrain from a 90m-horizontal-resolution digital elevation model. The direct component of irradiance is set to zero when the beam from the sun is blocked by the terrain. The diffuse component of irradiance is reduced throughout the day if the sky view at the location is significantly reduced by the surrounding terrain. Global irradiance incorporates both effects. (Optional)">terrainShading</a>, <a href="https://docs.solcast.com.au/#359e01c2-ef0c-4f58-812f-47726b4c3881" title="(string): Response format (Optional)">format</a></p>
+<p><strong>Example Usage:</strong>
+<div class="language-csharp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">Solcast.Clients</span><span class="p">;</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kt">var</span><span class="w"> </span><span class="n">historicClient</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HistoricClient</span><span class="p">();</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kt">var</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="n">historicClient</span><span class="p">.</span><span class="n">GetAdvancedPvPower</span><span class="p">(</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">start</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-06-01T06:00&quot;</span><span class="p">,</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="n">resourceId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ba75-e17a-7374-95ed&quot;</span><span class="p">,</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="n">end</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2024-07-01T06:00&quot;</span><span class="p">,</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="n">format</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;csv&quot;</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">);</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">RawResponse</span><span class="p">);</span>
+</span></code></pre></div>
+<strong>Sample Output:</strong></p>
+<table>
+<thead>
+<tr>
+<th>pv_power_advanced</th>
+<th>period_end</th>
+<th>period</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.023</td>
+<td>2024-06-01T06:30:00+00:00</td>
+<td>PT30M</td>
+</tr>
+<tr>
+<td>0</td>
+<td>2024-06-01T07:00:00+00:00</td>
+<td>PT30M</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>1.582</td>
+<td>2024-07-01T05:30:00+00:00</td>
+<td>PT30M</td>
+</tr>
+<tr>
+<td>0.914</td>
+<td>2024-07-01T06:00:00+00:00</td>
+<td>PT30M</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.tooltips"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>
