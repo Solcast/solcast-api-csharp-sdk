@@ -17,7 +17,7 @@ namespace Solcast.Models
         public double? Longitude { get; set; } // Required
 
         /// <summary>
-        /// Number of sections to divide the azimuth circle into, governing how many items are returned in the response. E.g. 10 = [-180°, -144°, -108°, -72°, -36°, 0°, 36°, 72°, 108°, 144°] Maximum 36
+        /// Number of sections to divide the azimuth circle into, governing how many items are returned in the response. E.g. 10 = [-180°, -144°, -108°, -72°, -36°, 0°, 36°, 72°, 108°, 144°] Maximum 360
         /// </summary>
         [JsonProperty("azimuth_intervals")]
         public int? AzimuthIntervals { get; set; } // Required
