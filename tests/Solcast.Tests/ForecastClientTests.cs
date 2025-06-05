@@ -46,7 +46,7 @@ namespace Solcast.Tests
             string format = "json";
 
             // Act
-            var response = await _forecastClient.GetRadiationAndWeather(
+            var response = await _forecastClient.GetForecastRadiationAndWeather(
                 latitude: latitude,
                 longitude: longitude,
                 outputParameters: outputParameters,
@@ -85,7 +85,7 @@ namespace Solcast.Tests
             // Act & Assert
             Assert.ThrowsAsync<UnauthorizedApiKeyException>(async () =>
             {
-                await _forecastClient.GetRadiationAndWeather(
+                await _forecastClient.GetForecastRadiationAndWeather(
                     latitude: latitude,
                     longitude: longitude,
                     outputParameters: outputParameters,

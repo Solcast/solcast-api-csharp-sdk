@@ -37,7 +37,7 @@ namespace Solcast.Tests
         }
 
         [Test]
-        public async Task GetRadiationAndWeather_ShouldReturnValidCsvData()
+        public async Task GetLiveRadiationAndWeather_ShouldReturnValidCsvData()
         {
             // Arrange
             double latitude = -33.856784;
@@ -46,7 +46,7 @@ namespace Solcast.Tests
             string format = "csv";
 
             // Act
-            var response = await _liveClient.GetRadiationAndWeather(
+            var response = await _liveClient.GetLiveRadiationAndWeather(
                 latitude: latitude,
                 longitude: longitude,
                 outputParameters: outputParameters,
@@ -60,7 +60,7 @@ namespace Solcast.Tests
         }
 
         [Test, Category("Live")]
-        public void GetRadiationAndWeather_ShouldThrowMissingApiKeyException_WhenApiKeyIsMissing()
+        public void GetLiveRadiationAndWeather_ShouldThrowMissingApiKeyException_WhenApiKeyIsMissing()
         {
             // Arrange: Simulate missing API key
             Environment.SetEnvironmentVariable("SOLCAST_API_KEY", null);
@@ -73,7 +73,7 @@ namespace Solcast.Tests
         }
 
         [Test, Category("Live")]
-        public void GetRadiationAndWeather_ShouldThrowUnauthorizedApiKeyException_WhenApiKeyIsInvalid()
+        public void GetLiveRadiationAndWeather_ShouldThrowUnauthorizedApiKeyException_WhenApiKeyIsInvalid()
         {
             // Arrange: Simulate an invalid API key
             Environment.SetEnvironmentVariable("SOLCAST_API_KEY", "invalid_api_key");
@@ -86,7 +86,7 @@ namespace Solcast.Tests
             // Act & Assert
             var ex = Assert.ThrowsAsync<UnauthorizedApiKeyException>(async () =>
             {
-                await _liveClient.GetRadiationAndWeather(
+                await _liveClient.GetLiveRadiationAndWeather(
                     latitude: latitude,
                     longitude: longitude,
                     outputParameters: outputParameters,
