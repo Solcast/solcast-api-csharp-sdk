@@ -34,34 +34,65 @@ namespace Solcast.Clients
             string format = null
         )
         {
-            var parameters = new Dictionary<string, string>();
-            if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
-            if (collectionId != null) parameters.Add("collectionId", collectionId.ToString());
-            if (aggregationId != null) parameters.Add("aggregationId", aggregationId.ToString());
-            if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
-            if (period != null) parameters.Add("period", period.ToString());
-            if (format != null) parameters.Add("format", format.ToString());
-
-            var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
-            var response = await _httpClient.GetAsync(SolcastUrls.LiveAggregations + $"?{queryString}");
-
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            try
             {
-                throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
+                var parameters = new Dictionary<string, string>();
+                if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
+                if (collectionId != null) parameters.Add("collectionId", collectionId.ToString());
+                if (aggregationId != null) parameters.Add("aggregationId", aggregationId.ToString());
+                if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
+                if (period != null) parameters.Add("period", period.ToString());
+                if (format != null) parameters.Add("format", format.ToString());
+
+                var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
+                var response = await _httpClient.GetAsync(SolcastUrls.LiveAggregations + $"?{queryString}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                var rawContent = await response.Content.ReadAsStringAsync();
+                
+                // Verbose output - useful for MCP scenarios and debugging
+                var verboseFlag = Environment.GetEnvironmentVariable("SOLCAST_VERBOSE_OUTPUT");
+                if (verboseFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    Console.Error.WriteLine("[Solcast] Raw Response: " + rawContent);
+                }
+
+                if (parameters.ContainsKey("format") && parameters["format"] == "json")
+                {
+                    var data = JsonConvert.DeserializeObject<LiveAggregationResponse>(rawContent);
+                    return new ApiResponse<LiveAggregationResponse>(data, rawContent);
+                }
+                return new ApiResponse<LiveAggregationResponse>(null, rawContent);
             }
-
-            response.EnsureSuccessStatusCode();
-
-            var rawContent = await response.Content.ReadAsStringAsync();
-
-            if (parameters.ContainsKey("format") && parameters["format"] == "json")
+            catch (UnauthorizedApiKeyException)
             {
-                var data = JsonConvert.DeserializeObject<LiveAggregationResponse>(rawContent);
-                return new ApiResponse<LiveAggregationResponse>(data, rawContent);
+                throw;
             }
-            return new ApiResponse<LiveAggregationResponse>(null, rawContent);
-        }
-        
+            catch (HttpRequestException httpEx)
+            {
+                var paramDetails = "outputParameters=" + outputParameters + ", " + "collectionId=" + collectionId + ", " + "aggregationId=" + aggregationId + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "format=" + format;
+                var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
+                var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
+                throw new Exception($@"HTTP error in GetLiveAggregations
+Parameters: {paramDetails}
+Status Code: {status}
+Content: {content}
+Error: {httpEx.Message}", httpEx);
+            }
+            catch (Exception ex)
+            {
+                var paramDetails = "outputParameters=" + outputParameters + ", " + "collectionId=" + collectionId + ", " + "aggregationId=" + aggregationId + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "format=" + format;
+                throw new Exception($@"Unhandled error in GetLiveAggregations
+Parameters: {paramDetails}
+Error: {ex.Message}", ex);
+            }
+        }        
         /// <summary>
         /// Get forecast aggregation data for up to 7 days of data at a time for a requested collection or aggregation.
         /// </summary>
@@ -80,32 +111,63 @@ namespace Solcast.Clients
             string format = null
         )
         {
-            var parameters = new Dictionary<string, string>();
-            if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
-            if (collectionId != null) parameters.Add("collectionId", collectionId.ToString());
-            if (aggregationId != null) parameters.Add("aggregationId", aggregationId.ToString());
-            if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
-            if (period != null) parameters.Add("period", period.ToString());
-            if (format != null) parameters.Add("format", format.ToString());
-
-            var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
-            var response = await _httpClient.GetAsync(SolcastUrls.ForecastAggregations + $"?{queryString}");
-
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            try
             {
-                throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
+                var parameters = new Dictionary<string, string>();
+                if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
+                if (collectionId != null) parameters.Add("collectionId", collectionId.ToString());
+                if (aggregationId != null) parameters.Add("aggregationId", aggregationId.ToString());
+                if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
+                if (period != null) parameters.Add("period", period.ToString());
+                if (format != null) parameters.Add("format", format.ToString());
+
+                var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
+                var response = await _httpClient.GetAsync(SolcastUrls.ForecastAggregations + $"?{queryString}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                var rawContent = await response.Content.ReadAsStringAsync();
+                
+                // Verbose output - useful for MCP scenarios and debugging
+                var verboseFlag = Environment.GetEnvironmentVariable("SOLCAST_VERBOSE_OUTPUT");
+                if (verboseFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    Console.Error.WriteLine("[Solcast] Raw Response: " + rawContent);
+                }
+
+                if (parameters.ContainsKey("format") && parameters["format"] == "json")
+                {
+                    var data = JsonConvert.DeserializeObject<ForecastAggregationResponse>(rawContent);
+                    return new ApiResponse<ForecastAggregationResponse>(data, rawContent);
+                }
+                return new ApiResponse<ForecastAggregationResponse>(null, rawContent);
             }
-
-            response.EnsureSuccessStatusCode();
-
-            var rawContent = await response.Content.ReadAsStringAsync();
-
-            if (parameters.ContainsKey("format") && parameters["format"] == "json")
+            catch (UnauthorizedApiKeyException)
             {
-                var data = JsonConvert.DeserializeObject<ForecastAggregationResponse>(rawContent);
-                return new ApiResponse<ForecastAggregationResponse>(data, rawContent);
+                throw;
             }
-            return new ApiResponse<ForecastAggregationResponse>(null, rawContent);
-        }
-    }
+            catch (HttpRequestException httpEx)
+            {
+                var paramDetails = "outputParameters=" + outputParameters + ", " + "collectionId=" + collectionId + ", " + "aggregationId=" + aggregationId + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "format=" + format;
+                var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
+                var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
+                throw new Exception($@"HTTP error in GetForecastAggregations
+Parameters: {paramDetails}
+Status Code: {status}
+Content: {content}
+Error: {httpEx.Message}", httpEx);
+            }
+            catch (Exception ex)
+            {
+                var paramDetails = "outputParameters=" + outputParameters + ", " + "collectionId=" + collectionId + ", " + "aggregationId=" + aggregationId + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "format=" + format;
+                throw new Exception($@"Unhandled error in GetForecastAggregations
+Parameters: {paramDetails}
+Error: {ex.Message}", ex);
+            }
+        }    }
 }

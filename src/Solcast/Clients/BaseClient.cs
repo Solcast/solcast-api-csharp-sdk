@@ -13,9 +13,9 @@ namespace Solcast.Clients
         private bool _disposed = false;
         protected readonly HttpClient _httpClient;
 
-        protected BaseClient(string baseUrl = null, IWebProxy proxy = null, bool checkForUpdates = true)
+        protected BaseClient(string baseUrl = null, IWebProxy proxy = null, bool checkForUpdates = false)
         {
-            if (checkForUpdates && !_updateChecked && !IsSdkUpdateCheckSuppressed())
+            if ((checkForUpdates || IsSdkUpdateCheckEnabled()) && !_updateChecked)
             {
                 CheckForUpdates();
                 _updateChecked = true;
@@ -44,10 +44,10 @@ namespace Solcast.Clients
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"solcast-api-csharp-sdk/{version}");
         }
 
-        private static bool IsSdkUpdateCheckSuppressed()
+        private static bool IsSdkUpdateCheckEnabled()
         {
-            var suppressFlag = Environment.GetEnvironmentVariable("SUPPRESS_SDK_UPDATE_CHECK");
-            return suppressFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true;
+            var checkFlag = Environment.GetEnvironmentVariable("CHECK_SDK_UPDATE");
+            return checkFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true;
         }
 
         public static void CheckForUpdates()
@@ -71,7 +71,7 @@ namespace Solcast.Clients
                     Console.WriteLine($@"A new version of the SDK is available: {latestVersionRaw}.
 To update, run the following command:
     dotnet add package Solcast --version {latestVersion}
-Disable this check by setting env variable SUPPRESS_SDK_UPDATE_CHECK='true'
+Automatic update checks are opt-in. Enable by setting CHECK_SDK_UPDATE='true'
 ");
                 }
             }

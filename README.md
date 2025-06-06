@@ -43,7 +43,8 @@ dotnet build
 
 ---
 ## Configuration
-Before using the SDK, you need to set your Solcast API key as an environment variable. You can register for an API key at Solcast Toolkit.
+
+Before using the SDK, you need to set your Solcast API key as an environment variable. You can register for an API key at [Solcast Toolkit](https://toolkit.solcast.com.au/).
 
 To set the API key in your environment:
 
@@ -65,7 +66,7 @@ export SOLCAST_API_KEY="{your_api_key}"
 using Solcast.Clients;
 
 var liveClient = new LiveClient();
-var response = await liveClient.GetRadiationAndWeather(
+var response = await liveClient.GetLiveRadiationAndWeather(
     latitude: -33.856784,
     longitude: 151.215297,
     outputParameters: ["air_temp", "dni", "ghi"]
@@ -80,7 +81,7 @@ Console.WriteLine(response.RawResponse);
 using Solcast.Clients;
 
 var forecastClient = new ForecastClient();
-var response = await forecastClient.GetForecast(
+var response = await forecastClient.GetForecastRadiationAndWeather(
     latitude: -33.856784,
     longitude: 151.215297,
     outputParameters: ["air_temp", "dni", "ghi"]
@@ -92,7 +93,7 @@ var response = await forecastClient.GetForecast(
 using Solcast.Clients;
 
 var historicClient = new HistoricClient();
-var response = await historicClient.GetRadiationAndWeather(
+var response = await historicClient.GetHistoricRadiationAndWeather(
     latitude: -33.856784,
     longitude: 151.215297,
     start: "2022-01-01T00:00",
@@ -105,7 +106,7 @@ var response = await historicClient.GetRadiationAndWeather(
 using Solcast.Clients;
 
 var tmyClient = new TmyClient();
-var response = await tmyClient.GetRadiationAndWeather(
+var response = await tmyClient.GetTmyRadiationAndWeather(
     latitude: -33.856784,
     longitude: 151.215297,
 );
@@ -116,7 +117,7 @@ var response = await tmyClient.GetRadiationAndWeather(
 using Solcast.Clients;
 
 var aggregationClient = new AggregationClient();
-var response = await aggregationClient.GetForecastAggregation(
+var response = await aggregationClient.GetForecastAggregations(
     collectionId: "country_total",
     aggregationId: "it_total",
     outputParameters: ["percentage", "pv_estimate"],
@@ -128,40 +129,39 @@ var response = await aggregationClient.GetForecastAggregation(
 ```csharp
 using Solcast.Clients;
 
-var pvClient = new PvPowerSitesClient();
-var response = await pvClient.ListPvPowerSites();
+var pvClient = new PvPowerSiteClient();
+var response = await pvClient.GetPvPowerSites();
 ```
 
 #### Getting metadata of a specific PV Power Site:
 ```csharp
 using Solcast.Clients;
 
-var pvClient = new PvPowerSitesClient();
+var pvClient = new PvPowerSiteClient();
 var response = await pvClient.GetPvPowerSite("ba75-e17a-7374-95ed");
 ```
 
 ## API Methods
 ### LiveClient
-- `GetRadiationAndWeather`: Retrieves live solar radiation and weather data.
-- `GetAdvancedPvPower`: Retrieves advanced PV power live data.
-- `GetRooftopPvPower`: Retrieves live rooftop PV power data based on location and other parameters.
+- `GetLiveRadiationAndWeather`: Retrieves live solar radiation and weather data.
+- `GetLiveAdvancedPvPower`: Retrieves advanced PV power live data.
+- `GetLiveRooftopPvPower`: Retrieves live rooftop PV power data based on location and other parameters.
 ### ForecastClient
-- `GetForecast`: Retrieves forecast solar radiation and weather data for up to 14 days ahead.
-- `GetRadiationAndWeather`: Retrieves forecast radiation and weather data for a specified location.
-- `GetAdvancedPvPower`: Retrieves advanced PV power forecasts with customizable options.
-- `GetRooftopPvPower`: Retrieves rooftop PV power forecast data based on location and other parameters.
+- `GetForecastRadiationAndWeather`: Retrieves irradiance and weather forecasts for the requested location from the present up to 14 days ahead
+- `GetForecastAdvancedPvPower`: Retrieves advanced PV power forecasts with customizable options.
+- `GetForecastRooftopPvPower`: Retrieves rooftop PV power forecast data based on location and other parameters.
 ### HistoricClient
-- `GetRadiationAndWeather`: Retrieves historic solar radiation and weather data for a specified time range.
-- `GetAdvancedPvPower`: Retrieves advanced PV power historical data.
-- `GetRooftopPvPower`: Retrieves rooftop PV power historical data.
+- `GetHistoricRadiationAndWeather`: Retrieves historic solar radiation and weather data for a specified time range.
+- `GetHistoricAdvancedPvPower`: Retrieves advanced PV power historical data.
+- `GetHistoricRooftopPvPower`: Retrieves rooftop PV power historical data.
 ### TmyClient
-- `GetRadiationAndWeather`: Retrieves TMY irradiance and weather data for a specified location.
-- `GetAdvancedPvPower`: Retrieves advanced PV power TMY data.
-- `GetRooftopPvPower`: Retrieves TMY rooftop PV power data.
+- `GetTmyRadiationAndWeather`: Retrieves TMY irradiance and weather data for a specified location.
+- `GetTmyAdvancedPvPower`: Retrieves advanced PV power TMY data.
+- `GetTmyRooftopPvPower`: Retrieves TMY rooftop PV power data.
 ### AggregationClient
-- `GetLiveAggregation`: Retrieves live grid aggregation data for up to 7 days.
-- `GetForecastAggregation`: Retrieves forecast grid aggregation data for up to 7 days.
-### PvPowerSitesClient
+- `GetLiveAggregations`: Retrieves live grid aggregation data for up to 7 days.
+- `GetForecastAggregations`: Retrieves forecast grid aggregation data for up to 7 days.
+### PvPowerSiteClient
 - `GetPvPowerSites`: Retrieves a list of all available PV power sites.
 - `GetPvPowerSite`: Retrieves metadata for a specific PV power site by its resource ID.
 - `PostPvPowerSite`: Creates a new PV Power Site for use with advanced PV power model.
@@ -169,19 +169,25 @@ var response = await pvClient.GetPvPowerSite("ba75-e17a-7374-95ed");
 - `PutPvPowerSite`: Overwrites an existing PV power site specifications.
 - `DeletePvPowerSite`: Deletes an existing PV power site.
 
-## Optional: Suppressing SDK Update Checks
-To suppress the SDK's automatic update check, set the SUPPRESS_SDK_UPDATE_CHECK environment variable to true:
+## Optional: Enabling SDK Update Checks
+By default, the SDK does not check for updates during runtime. To enable automatic update checking, you can pass `true` for the `checkForUpdates` parameter when creating client instances:
+
+```csharp
+var liveClient = new LiveClient(checkForUpdates: true);
+```
+
+Alternatively, to enable update checking automatically for all client instances, set the CHECK_SDK_UPDATE environment variable to true:
 
 Windows PowerShell:
 ```powershell
-$env:SUPPRESS_SDK_UPDATE_CHECK = "true"
+$env:CHECK_SDK_UPDATE = "true"
 ```
 
 Linux/macOS:
 ```bash
-export SUPPRESS_SDK_UPDATE_CHECK="true"
+export CHECK_SDK_UPDATE="true"
 ```
-When this flag is set, the SDK will skip checking for new versions during runtime. This is particularly useful automated environments where update messages are not necessary.
+When this flag is set, the SDK will automatically check for new versions during runtime regardless of the `checkForUpdates` parameter value.
 
 ## Contributing
 We welcome contributions to this SDK! If you'd like to contribute, please submit a Pull Request or open an issue with any suggestions or bug reports.

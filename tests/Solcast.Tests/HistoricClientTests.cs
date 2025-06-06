@@ -47,7 +47,7 @@ namespace Solcast.Tests
             string format = "json";
 
             // Act
-            var response = await _historicClient.GetRadiationAndWeather(
+            var response = await _historicClient.GetHistoricRadiationAndWeather(
                 latitude: latitude,
                 longitude: longitude,
                 start: start,
@@ -85,7 +85,7 @@ namespace Solcast.Tests
             string format = "json";
 
             // Act
-            var response = await _historicClient.GetRooftopPvPower(
+            var response = await _historicClient.GetHistoricRooftopPvPower(
                 latitude: latitude,
                 longitude: longitude,
                 start: start,
@@ -115,7 +115,7 @@ namespace Solcast.Tests
             // Act & Assert
             Assert.ThrowsAsync<UnauthorizedApiKeyException>(async () =>
             {
-                await _historicClient.GetRooftopPvPower(
+                await _historicClient.GetHistoricRooftopPvPower(
                     latitude: latitude,
                     longitude: longitude,
                     start: start,
@@ -136,7 +136,7 @@ namespace Solcast.Tests
             string format = "json";
 
             // Act
-            var response = await _historicClient.GetAdvancedPvPower(
+            var response = await _historicClient.GetHistoricAdvancedPvPower(
                 resourceId: resourceId,
                 start: start,
                 duration: duration,
