@@ -1,23 +1,28 @@
-[tool.poetry]
+[project]
 name = "solcast-api-csharp-sdk"
 version = "0.1.0"
-description = ""
-authors = ["Nikolay Petrov <nikolay@solcast.com.au>"]
-readme = "README.md"
+description = "C# SDK for Solcast API with Python documentation tools"
+authors = [
+    {name = "Nikolay Petrov", email = "nikolay@solcast.com.au"}
+]
+requires-python = ">=3.10"
+dependencies = []
 
-[tool.poetry.dependencies]
-python = "^3.10"
-
-[tool.poetry.group.docs.dependencies]
-mkdocs = "^1.6.1"
-mkdocs-material = "^9.5.34"
-mkdocs-jupyter = "^0.25.0"
-
-
-[tool.poetry.group.generate.dependencies]
-requests = "^2.32.3"
-pyyaml = "^6.0.2"
+[project.optional-dependencies]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.5.34",
+    "mkdocs-jupyter>=0.25.0",
+]
+generate = [
+    "requests>=2.32.3",
+    "pyyaml>=6.0.2",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+include = ["*.md", "*.toml"]
+exclude = ["src/", "tests/", "examples/"]
