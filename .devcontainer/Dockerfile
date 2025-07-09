@@ -13,13 +13,12 @@ RUN apt-get update && apt-get install -y \
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-RUN curl -sSL https://install.python-poetry.org | python3 - \
-    && ln -s /root/.local/bin/poetry /usr/local/bin/poetry
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && mv /root/.cargo/bin/uv /usr/local/bin/uv
 
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml uv.lock ./
 
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-root --no-interaction --no-ansi --only=docs
+RUN uv sync --extra docs --frozen
 
 # Default command
 CMD [ "bash" ]
