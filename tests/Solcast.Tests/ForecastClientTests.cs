@@ -7,10 +7,11 @@ using System.Collections.Generic;
 namespace Solcast.Tests
 {
     [TestFixture]
-    public class ForecastClientTests
+    public class ForecastClientTests : IDisposable
     {
         private ForecastClient _forecastClient;
         private string _originalApiKey;
+        private bool _disposed = false;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -99,6 +100,15 @@ namespace Solcast.Tests
         {
             // Restore the original API key after all tests
             Environment.SetEnvironmentVariable("SOLCAST_API_KEY", _originalApiKey);
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _forecastClient?.Dispose();
+                _disposed = true;
+            }
         }
     }
 }

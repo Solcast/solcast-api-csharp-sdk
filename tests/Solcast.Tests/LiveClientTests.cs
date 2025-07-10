@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 namespace Solcast.Tests
 {
     [TestFixture]
-    public class LiveClientTests
+    public class LiveClientTests : IDisposable
     {
         private LiveClient _liveClient;
         private string _originalApiKey;
+        private bool _disposed = false;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -37,7 +38,7 @@ namespace Solcast.Tests
         }
 
         [Test]
-        public async Task GetLiveRadiationAndWeather_ShouldReturnValidCsvData()
+        public async Task GetRadiationAndWeather_ShouldReturnValidCsvData()
         {
             // Arrange
             double latitude = -33.856784;
@@ -60,7 +61,7 @@ namespace Solcast.Tests
         }
 
         [Test, Category("Live")]
-        public void GetLiveRadiationAndWeather_ShouldThrowMissingApiKeyException_WhenApiKeyIsMissing()
+        public void GetRadiationAndWeather_ShouldThrowMissingApiKeyException_WhenApiKeyIsMissing()
         {
             // Arrange: Simulate missing API key
             Environment.SetEnvironmentVariable("SOLCAST_API_KEY", null);
@@ -73,7 +74,7 @@ namespace Solcast.Tests
         }
 
         [Test, Category("Live")]
-        public void GetLiveRadiationAndWeather_ShouldThrowUnauthorizedApiKeyException_WhenApiKeyIsInvalid()
+        public void GetRadiationAndWeather_ShouldThrowUnauthorizedApiKeyException_WhenApiKeyIsInvalid()
         {
             // Arrange: Simulate an invalid API key
             Environment.SetEnvironmentVariable("SOLCAST_API_KEY", "invalid_api_key");
@@ -103,6 +104,15 @@ namespace Solcast.Tests
         {
             // After all tests are completed, restore the original API key
             Environment.SetEnvironmentVariable("SOLCAST_API_KEY", _originalApiKey);
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _liveClient?.Dispose();
+                _disposed = true;
+            }
         }
     }
 }

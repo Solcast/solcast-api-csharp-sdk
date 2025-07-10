@@ -1,13 +1,15 @@
 using NUnit.Framework;
 using Solcast.Clients;
+using System;
 using System.Threading.Tasks;
 
 namespace Solcast.Tests
 {
     [TestFixture]
-    public class AggregationClientTests
+    public class AggregationClientTests : IDisposable
     {
         private AggregationClient _aggregationClient;
+        private bool _disposed = false;
 
         [SetUp]
         public void Setup()
@@ -34,6 +36,15 @@ namespace Solcast.Tests
                 outputParameters: ["percentage", "pv_estimate"]
             );
             Assert.IsNotNull(response);
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _aggregationClient?.Dispose();
+                _disposed = true;
+            }
         }
     }
 }

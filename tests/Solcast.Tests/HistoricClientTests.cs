@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 namespace Solcast.Tests
 {
     [TestFixture]
-    public class HistoricClientTests
+    public class HistoricClientTests : IDisposable
     {
         private HistoricClient _historicClient;
         private string _originalApiKey;
+        private bool _disposed = false;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -153,6 +154,15 @@ namespace Solcast.Tests
         {
             // Restore the original API key after all tests
             Environment.SetEnvironmentVariable("SOLCAST_API_KEY", _originalApiKey);
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _historicClient?.Dispose();
+                _disposed = true;
+            }
         }
     }
 }

@@ -1,13 +1,15 @@
 using NUnit.Framework;
 using Solcast.Clients;
+using System;
 using System.Threading.Tasks;
 
 namespace Solcast.Tests
 {
     [TestFixture]
-    public class PvPowerSiteClientTests
+    public class PvPowerSiteClientTests : IDisposable
     {
         private PvPowerSiteClient _client;
+        private bool _disposed = false;
 
         [SetUp]
         public void Setup()
@@ -42,6 +44,15 @@ namespace Solcast.Tests
             Assert.IsNotNull(response);
             // Assert.AreEqual(response.Data.ResourceId, resourceId);
             Assert.IsTrue(response.RawResponse.Contains("\"resource_id\":\"ba75-e17a-7374-95ed\""));
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _client?.Dispose();
+                _disposed = true;
+            }
         }
     }
 }
