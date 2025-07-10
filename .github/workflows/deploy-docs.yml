@@ -58,4 +58,4 @@ jobs:
           JUPYTER_PLATFORM_DIRS: 1
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdocs gh-deploy --force
+          uv run mkdocs gh-deploy --force

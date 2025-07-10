@@ -1,5 +1,5 @@
 site_name: Solcast API C# SDK
-site_url: https://solcast.github.io/solcast_net/
+site_url: https://solcast.github.io/solcast-api-csharp-sdk/
 site_dir: public
 theme:
   name: material
