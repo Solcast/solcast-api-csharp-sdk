@@ -20,7 +20,7 @@ Fetching Live Radiation and Weather Data:
 using Solcast.Clients;
 
 var liveClient = new LiveClient();
-var response = await liveClient.GetRadiationAndWeather(
+var response = await liveClient.GetLiveRadiationAndWeather(
     latitude: -33.856784,
     longitude: 151.215297,
     outputParameteres: ["air_temp", "dni", "ghi" ]
@@ -39,7 +39,7 @@ var location = UnmeteredLocations.Locations["Sydney Opera House"];
 
 var forecastClient = new ForecastClient();
 
-var response = await forecastClient.GetRooftopPvPower(
+var response = await forecastClient.GetForecastRooftopPvPower(
     latitude: location.Latitude,
     longitude: location.Longitude,
     outputParameters: ["pv_power_rooftop"],
