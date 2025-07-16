@@ -30,7 +30,7 @@ namespace Solcast.Clients
         /// <param name="applyTrackerInactive">Indicating if trackers are inactive. If True, panels are assumed all facing up (i.e. zero rotation). Only has effect if your site has a tracking_type that is not “fixed”.</param>
         /// <param name="terrainShading">If true, irradiance parameters are modified based on the surrounding terrain from a 90m-horizontal-resolution digital elevation model. The direct component of irradiance is set to zero when the beam from the sun is blocked by the terrain. The diffuse component of irradiance is reduced throughout the day if the sky view at the location is significantly reduced by the surrounding terrain. Global irradiance incorporates both effects.</param>
         /// <param name="format">Response format</param>
-        public async Task<ApiResponse<ForecastResponse>> GetForecastAdvancedPvPower(
+        public async Task<ApiResponse<ForecastResponse>> GetAdvancedPvPower(
             string resourceId,
             int? hours = null,
             List<string> outputParameters = null,
@@ -44,70 +44,39 @@ namespace Solcast.Clients
             string format = null
         )
         {
-            try
+            var parameters = new Dictionary<string, string>();
+            parameters.Add("resourceId", resourceId.ToString());
+            if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
+            if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
+            if (period != null) parameters.Add("period", period.ToString());
+            if (applyAvailability.HasValue) parameters.Add("applyAvailability", applyAvailability.Value.ToString());
+            if (applyConstraint.HasValue) parameters.Add("applyConstraint", applyConstraint.Value.ToString());
+            if (applyDustSoiling.HasValue) parameters.Add("applyDustSoiling", applyDustSoiling.Value.ToString());
+            if (applySnowSoiling.HasValue) parameters.Add("applySnowSoiling", applySnowSoiling.Value.ToString());
+            if (applyTrackerInactive.HasValue) parameters.Add("applyTrackerInactive", applyTrackerInactive.Value.ToString());
+            if (terrainShading.HasValue) parameters.Add("terrainShading", terrainShading.Value.ToString());
+            if (format != null) parameters.Add("format", format.ToString());
+
+            var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
+            var response = await _httpClient.GetAsync(SolcastUrls.ForecastAdvancedPvPower + $"?{queryString}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                var parameters = new Dictionary<string, string>();
-                parameters.Add("resourceId", resourceId.ToString());
-                if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
-                if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
-                if (period != null) parameters.Add("period", period.ToString());
-                if (applyAvailability.HasValue) parameters.Add("applyAvailability", applyAvailability.Value.ToString());
-                if (applyConstraint.HasValue) parameters.Add("applyConstraint", applyConstraint.Value.ToString());
-                if (applyDustSoiling.HasValue) parameters.Add("applyDustSoiling", applyDustSoiling.Value.ToString());
-                if (applySnowSoiling.HasValue) parameters.Add("applySnowSoiling", applySnowSoiling.Value.ToString());
-                if (applyTrackerInactive.HasValue) parameters.Add("applyTrackerInactive", applyTrackerInactive.Value.ToString());
-                if (terrainShading.HasValue) parameters.Add("terrainShading", terrainShading.Value.ToString());
-                if (format != null) parameters.Add("format", format.ToString());
-
-                var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
-                var response = await _httpClient.GetAsync(SolcastUrls.ForecastAdvancedPvPower + $"?{queryString}");
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
-                }
-
-                response.EnsureSuccessStatusCode();
-
-                var rawContent = await response.Content.ReadAsStringAsync();
-                
-                // Verbose output - useful for MCP scenarios and debugging
-                var verboseFlag = Environment.GetEnvironmentVariable("SOLCAST_VERBOSE_OUTPUT");
-                if (verboseFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    Console.Error.WriteLine("[Solcast] Raw Response: " + rawContent);
-                }
-
-                if (parameters.ContainsKey("format") && parameters["format"] == "json")
-                {
-                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
-                    return new ApiResponse<ForecastResponse>(data, rawContent);
-                }
-                return new ApiResponse<ForecastResponse>(null, rawContent);
+                throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
             }
-            catch (UnauthorizedApiKeyException)
+
+            response.EnsureSuccessStatusCode();
+
+            var rawContent = await response.Content.ReadAsStringAsync();
+
+            if (parameters.ContainsKey("format") && parameters["format"] == "json")
             {
-                throw;
+                var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
+                return new ApiResponse<ForecastResponse>(data, rawContent);
             }
-            catch (HttpRequestException httpEx)
-            {
-                var paramDetails = "resourceId=" + resourceId + ", " + "hours=" + hours + ", " + "outputParameters=" + outputParameters + ", " + "period=" + period + ", " + "applyAvailability=" + applyAvailability + ", " + "applyConstraint=" + applyConstraint + ", " + "applyDustSoiling=" + applyDustSoiling + ", " + "applySnowSoiling=" + applySnowSoiling + ", " + "applyTrackerInactive=" + applyTrackerInactive + ", " + "terrainShading=" + terrainShading + ", " + "format=" + format;
-                var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
-                var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
-                throw new Exception($@"HTTP error in GetForecastAdvancedPvPower
-Parameters: {paramDetails}
-Status Code: {status}
-Content: {content}
-Error: {httpEx.Message}", httpEx);
-            }
-            catch (Exception ex)
-            {
-                var paramDetails = "resourceId=" + resourceId + ", " + "hours=" + hours + ", " + "outputParameters=" + outputParameters + ", " + "period=" + period + ", " + "applyAvailability=" + applyAvailability + ", " + "applyConstraint=" + applyConstraint + ", " + "applyDustSoiling=" + applyDustSoiling + ", " + "applySnowSoiling=" + applySnowSoiling + ", " + "applyTrackerInactive=" + applyTrackerInactive + ", " + "terrainShading=" + terrainShading + ", " + "format=" + format;
-                throw new Exception($@"Unhandled error in GetForecastAdvancedPvPower
-Parameters: {paramDetails}
-Error: {ex.Message}", ex);
-            }
+            return new ApiResponse<ForecastResponse>(null, rawContent);
         }
+
         /// <summary>
         /// Get forecast aggregation data for up to 7 days of data at a time for a requested collection or aggregation.
         /// </summary>
@@ -117,7 +86,7 @@ Error: {ex.Message}", ex);
         /// <param name="hours">The number of hours to return in the response.</param>
         /// <param name="period">Length of the averaging period in ISO 8601 format.</param>
         /// <param name="format">Response format</param>
-        public async Task<ApiResponse<ForecastAggregationResponse>> GetForecastAggregations(
+        public async Task<ApiResponse<ForecastAggregationResponse>> GetAggregations(
             List<string> outputParameters = null,
             string collectionId = null,
             string aggregationId = null,
@@ -126,65 +95,34 @@ Error: {ex.Message}", ex);
             string format = null
         )
         {
-            try
+            var parameters = new Dictionary<string, string>();
+            if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
+            if (collectionId != null) parameters.Add("collectionId", collectionId.ToString());
+            if (aggregationId != null) parameters.Add("aggregationId", aggregationId.ToString());
+            if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
+            if (period != null) parameters.Add("period", period.ToString());
+            if (format != null) parameters.Add("format", format.ToString());
+
+            var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
+            var response = await _httpClient.GetAsync(SolcastUrls.ForecastAggregations + $"?{queryString}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                var parameters = new Dictionary<string, string>();
-                if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
-                if (collectionId != null) parameters.Add("collectionId", collectionId.ToString());
-                if (aggregationId != null) parameters.Add("aggregationId", aggregationId.ToString());
-                if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
-                if (period != null) parameters.Add("period", period.ToString());
-                if (format != null) parameters.Add("format", format.ToString());
-
-                var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
-                var response = await _httpClient.GetAsync(SolcastUrls.ForecastAggregations + $"?{queryString}");
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
-                }
-
-                response.EnsureSuccessStatusCode();
-
-                var rawContent = await response.Content.ReadAsStringAsync();
-                
-                // Verbose output - useful for MCP scenarios and debugging
-                var verboseFlag = Environment.GetEnvironmentVariable("SOLCAST_VERBOSE_OUTPUT");
-                if (verboseFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    Console.Error.WriteLine("[Solcast] Raw Response: " + rawContent);
-                }
-
-                if (parameters.ContainsKey("format") && parameters["format"] == "json")
-                {
-                    var data = JsonConvert.DeserializeObject<ForecastAggregationResponse>(rawContent);
-                    return new ApiResponse<ForecastAggregationResponse>(data, rawContent);
-                }
-                return new ApiResponse<ForecastAggregationResponse>(null, rawContent);
+                throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
             }
-            catch (UnauthorizedApiKeyException)
+
+            response.EnsureSuccessStatusCode();
+
+            var rawContent = await response.Content.ReadAsStringAsync();
+
+            if (parameters.ContainsKey("format") && parameters["format"] == "json")
             {
-                throw;
+                var data = JsonConvert.DeserializeObject<ForecastAggregationResponse>(rawContent);
+                return new ApiResponse<ForecastAggregationResponse>(data, rawContent);
             }
-            catch (HttpRequestException httpEx)
-            {
-                var paramDetails = "outputParameters=" + outputParameters + ", " + "collectionId=" + collectionId + ", " + "aggregationId=" + aggregationId + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "format=" + format;
-                var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
-                var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
-                throw new Exception($@"HTTP error in GetForecastAggregations
-Parameters: {paramDetails}
-Status Code: {status}
-Content: {content}
-Error: {httpEx.Message}", httpEx);
-            }
-            catch (Exception ex)
-            {
-                var paramDetails = "outputParameters=" + outputParameters + ", " + "collectionId=" + collectionId + ", " + "aggregationId=" + aggregationId + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "format=" + format;
-                throw new Exception($@"Unhandled error in GetForecastAggregations
-Parameters: {paramDetails}
-Error: {ex.Message}", ex);
-            }
+            return new ApiResponse<ForecastAggregationResponse>(null, rawContent);
         }
+
         /// <summary>
         /// Get basic rooftop PV power forecasts from the present time up to 14 days ahead for the requested location, derived from satellite (clouds and irradiance over non-polar continental areas, nowcasted for approx. four hours ahead) and numerical weather models (other data and longer horizons).
         /// 
@@ -206,7 +144,7 @@ Error: {ex.Message}", ex);
         /// <param name="outputParameters">The output parameters to include in the response.</param>
         /// <param name="terrainShading">If true, irradiance parameters are modified based on the surrounding terrain from a 90m-horizontal-resolution digital elevation model. The direct component of irradiance is set to zero when the beam from the sun is blocked by the terrain. The diffuse component of irradiance is reduced throughout the day if the sky view at the location is significantly reduced by the surrounding terrain. Global irradiance incorporates both effects.</param>
         /// <param name="format">Response format</param>
-        public async Task<ApiResponse<ForecastResponse>> GetForecastRooftopPvPower(
+        public async Task<ApiResponse<ForecastResponse>> GetRooftopPvPower(
             double? latitude,
             double? longitude,
             float? capacity,
@@ -221,71 +159,40 @@ Error: {ex.Message}", ex);
             string format = null
         )
         {
-            try
+            var parameters = new Dictionary<string, string>();
+            parameters.Add("latitude", latitude.ToString());
+            parameters.Add("longitude", longitude.ToString());
+            parameters.Add("capacity", capacity.ToString());
+            if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
+            if (period != null) parameters.Add("period", period.ToString());
+            if (tilt.HasValue) parameters.Add("tilt", tilt.Value.ToString());
+            if (azimuth.HasValue) parameters.Add("azimuth", azimuth.Value.ToString());
+            if (installDate != null) parameters.Add("installDate", installDate.ToString());
+            if (lossFactor.HasValue) parameters.Add("lossFactor", lossFactor.Value.ToString());
+            if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
+            if (terrainShading.HasValue) parameters.Add("terrainShading", terrainShading.Value.ToString());
+            if (format != null) parameters.Add("format", format.ToString());
+
+            var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
+            var response = await _httpClient.GetAsync(SolcastUrls.ForecastRooftopPvPower + $"?{queryString}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                var parameters = new Dictionary<string, string>();
-                parameters.Add("latitude", latitude.ToString());
-                parameters.Add("longitude", longitude.ToString());
-                parameters.Add("capacity", capacity.ToString());
-                if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
-                if (period != null) parameters.Add("period", period.ToString());
-                if (tilt.HasValue) parameters.Add("tilt", tilt.Value.ToString());
-                if (azimuth.HasValue) parameters.Add("azimuth", azimuth.Value.ToString());
-                if (installDate != null) parameters.Add("installDate", installDate.ToString());
-                if (lossFactor.HasValue) parameters.Add("lossFactor", lossFactor.Value.ToString());
-                if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
-                if (terrainShading.HasValue) parameters.Add("terrainShading", terrainShading.Value.ToString());
-                if (format != null) parameters.Add("format", format.ToString());
-
-                var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
-                var response = await _httpClient.GetAsync(SolcastUrls.ForecastRooftopPvPower + $"?{queryString}");
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
-                }
-
-                response.EnsureSuccessStatusCode();
-
-                var rawContent = await response.Content.ReadAsStringAsync();
-                
-                // Verbose output - useful for MCP scenarios and debugging
-                var verboseFlag = Environment.GetEnvironmentVariable("SOLCAST_VERBOSE_OUTPUT");
-                if (verboseFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    Console.Error.WriteLine("[Solcast] Raw Response: " + rawContent);
-                }
-
-                if (parameters.ContainsKey("format") && parameters["format"] == "json")
-                {
-                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
-                    return new ApiResponse<ForecastResponse>(data, rawContent);
-                }
-                return new ApiResponse<ForecastResponse>(null, rawContent);
+                throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
             }
-            catch (UnauthorizedApiKeyException)
+
+            response.EnsureSuccessStatusCode();
+
+            var rawContent = await response.Content.ReadAsStringAsync();
+
+            if (parameters.ContainsKey("format") && parameters["format"] == "json")
             {
-                throw;
+                var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
+                return new ApiResponse<ForecastResponse>(data, rawContent);
             }
-            catch (HttpRequestException httpEx)
-            {
-                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "capacity=" + capacity + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "tilt=" + tilt + ", " + "azimuth=" + azimuth + ", " + "installDate=" + installDate + ", " + "lossFactor=" + lossFactor + ", " + "outputParameters=" + outputParameters + ", " + "terrainShading=" + terrainShading + ", " + "format=" + format;
-                var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
-                var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
-                throw new Exception($@"HTTP error in GetForecastRooftopPvPower
-Parameters: {paramDetails}
-Status Code: {status}
-Content: {content}
-Error: {httpEx.Message}", httpEx);
-            }
-            catch (Exception ex)
-            {
-                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "capacity=" + capacity + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "tilt=" + tilt + ", " + "azimuth=" + azimuth + ", " + "installDate=" + installDate + ", " + "lossFactor=" + lossFactor + ", " + "outputParameters=" + outputParameters + ", " + "terrainShading=" + terrainShading + ", " + "format=" + format;
-                throw new Exception($@"Unhandled error in GetForecastRooftopPvPower
-Parameters: {paramDetails}
-Error: {ex.Message}", ex);
-            }
+            return new ApiResponse<ForecastResponse>(null, rawContent);
         }
+
         /// <summary>
         /// Get irradiance and weather forecasts for the requested location from the present up to 14 days ahead, derived from satellite (clouds and irradiance over non-polar continental areas, now casted for approx. four hours ahead) and numerical weather models (other data and longer horizons).
         /// </summary>
@@ -299,7 +206,7 @@ Error: {ex.Message}", ex);
         /// <param name="latitude">The latitude of the location you request data for. Must be a decimal number between -90 and 90.</param>
         /// <param name="longitude">The longitude of the location you request data for. Must be a decimal number between -180 and 180.</param>
         /// <param name="format">Response format</param>
-        public async Task<ApiResponse<ForecastResponse>> GetForecastRadiationAndWeather(
+        public async Task<ApiResponse<ForecastResponse>> GetRadiationAndWeather(
             double? latitude,
             double? longitude,
             int? hours = null,
@@ -312,67 +219,36 @@ Error: {ex.Message}", ex);
             string format = null
         )
         {
-            try
+            var parameters = new Dictionary<string, string>();
+            parameters.Add("latitude", latitude.ToString());
+            parameters.Add("longitude", longitude.ToString());
+            if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
+            if (period != null) parameters.Add("period", period.ToString());
+            if (tilt.HasValue) parameters.Add("tilt", tilt.Value.ToString());
+            if (azimuth.HasValue) parameters.Add("azimuth", azimuth.Value.ToString());
+            if (arrayType != null) parameters.Add("arrayType", arrayType.ToString());
+            if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
+            if (terrainShading.HasValue) parameters.Add("terrainShading", terrainShading.Value.ToString());
+            if (format != null) parameters.Add("format", format.ToString());
+
+            var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
+            var response = await _httpClient.GetAsync(SolcastUrls.ForecastRadiationAndWeather + $"?{queryString}");
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                var parameters = new Dictionary<string, string>();
-                parameters.Add("latitude", latitude.ToString());
-                parameters.Add("longitude", longitude.ToString());
-                if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
-                if (period != null) parameters.Add("period", period.ToString());
-                if (tilt.HasValue) parameters.Add("tilt", tilt.Value.ToString());
-                if (azimuth.HasValue) parameters.Add("azimuth", azimuth.Value.ToString());
-                if (arrayType != null) parameters.Add("arrayType", arrayType.ToString());
-                if (outputParameters != null && outputParameters.Any()) parameters.Add("outputParameters", string.Join(",", outputParameters));
-                if (terrainShading.HasValue) parameters.Add("terrainShading", terrainShading.Value.ToString());
-                if (format != null) parameters.Add("format", format.ToString());
-
-                var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
-                var response = await _httpClient.GetAsync(SolcastUrls.ForecastRadiationAndWeather + $"?{queryString}");
-
-                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
-                }
-
-                response.EnsureSuccessStatusCode();
-
-                var rawContent = await response.Content.ReadAsStringAsync();
-                
-                // Verbose output - useful for MCP scenarios and debugging
-                var verboseFlag = Environment.GetEnvironmentVariable("SOLCAST_VERBOSE_OUTPUT");
-                if (verboseFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    Console.Error.WriteLine("[Solcast] Raw Response: " + rawContent);
-                }
-
-                if (parameters.ContainsKey("format") && parameters["format"] == "json")
-                {
-                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
-                    return new ApiResponse<ForecastResponse>(data, rawContent);
-                }
-                return new ApiResponse<ForecastResponse>(null, rawContent);
+                throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
             }
-            catch (UnauthorizedApiKeyException)
+
+            response.EnsureSuccessStatusCode();
+
+            var rawContent = await response.Content.ReadAsStringAsync();
+
+            if (parameters.ContainsKey("format") && parameters["format"] == "json")
             {
-                throw;
+                var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
+                return new ApiResponse<ForecastResponse>(data, rawContent);
             }
-            catch (HttpRequestException httpEx)
-            {
-                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "tilt=" + tilt + ", " + "azimuth=" + azimuth + ", " + "arrayType=" + arrayType + ", " + "outputParameters=" + outputParameters + ", " + "terrainShading=" + terrainShading + ", " + "format=" + format;
-                var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
-                var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
-                throw new Exception($@"HTTP error in GetForecastRadiationAndWeather
-Parameters: {paramDetails}
-Status Code: {status}
-Content: {content}
-Error: {httpEx.Message}", httpEx);
-            }
-            catch (Exception ex)
-            {
-                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "tilt=" + tilt + ", " + "azimuth=" + azimuth + ", " + "arrayType=" + arrayType + ", " + "outputParameters=" + outputParameters + ", " + "terrainShading=" + terrainShading + ", " + "format=" + format;
-                throw new Exception($@"Unhandled error in GetForecastRadiationAndWeather
-Parameters: {paramDetails}
-Error: {ex.Message}", ex);
-            }
-        }    }
+            return new ApiResponse<ForecastResponse>(null, rawContent);
+        }
+    }
 }
