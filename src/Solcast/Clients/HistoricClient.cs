@@ -17,7 +17,9 @@ namespace Solcast.Clients
         }
 
         /// <summary>
-        /// Get historical advanced PV power estimated actuals for the requested location, derived from satellite (clouds and irradiance over non-polar continental areas) and numerical weather models (other data).
+        /// Get historical advanced PV power estimated actuals for the requested location, derived from satellite (clouds and irradiance over non-polar continental areas) and numerical weather models (other data). Data is available from 2007-01-01T00:00Z to 7 days ago.
+        /// 
+        /// [The period from 7 days ago to Now is available in the Get Advanced PV Power Live Estimated Actuals endpoint.](https://docs.solcast.com.au/#9f3aed26-1078-4ff6-86e6-23a710c6fae7)
         /// </summary>
         /// <param name="start">ISO_8601 compliant starting datetime for the historical data. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed.</param>
         /// <param name="end">Must include one of end_date and duration. ISO_8601 compliant ending datetime for the historical data. Must be within 31 days of the start_date. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed.</param>
@@ -118,7 +120,9 @@ Error: {ex.Message}", ex);
             }
         }
         /// <summary>
-        /// Get historical irradiance and weather estimated actuals for up to 31 days of data at a time for a requested location, derived from satellite (clouds and irradiance over non-polar continental areas) and numerical weather models (other data). Data is available from 2007-01-01T00:00Z up to real-time estimated actuals.
+        /// Get historical irradiance and weather estimated actuals for up to 31 days of data at a time for a requested location, derived from satellite (clouds and irradiance over non-polar continental areas) and numerical weather models (other data). Data is available from 2007-01-01T00:00Z to 7 days ago.
+        /// 
+        /// [The period from 7 days ago to Now is available in the Get Irradiance and Weather Live Estimated Actuals endpoint.](https://docs.solcast.com.au/#b9863910-c788-4e98-a3af-eb8da8f49647)
         /// </summary>
         /// <param name="start">ISO_8601 compliant starting datetime for the historical data. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed.</param>
         /// <param name="end">Must include one of end_date and duration. ISO_8601 compliant ending datetime for the historical data. Must be within 31 days of the start_date. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed.</param>
@@ -216,7 +220,9 @@ Error: {ex.Message}", ex);
             }
         }
         /// <summary>
-        /// Get historical basic rooftop PV power estimated actuals for the requested location, derived from satellite (clouds and irradiance over non-polar continental areas) and numerical weather models (other data).
+        /// Get historical basic rooftop PV power estimated actuals for the requested location, derived from satellite (clouds and irradiance over non-polar continental areas) and numerical weather models (other data). Data is available from 2007-01-01T00:00Z to 7 days ago.
+        /// 
+        /// [The period from 7 days ago to Now is available in the Get Rooftop PV Power Live Estimated Actuals endpoint.](https://docs.solcast.com.au/#4c9fa796-82e5-4e8a-b811-85a8c9fb85db)
         /// 
         /// **Attention hobbyist users**
         /// 
