@@ -189,19 +189,6 @@ export CHECK_SDK_UPDATE="true"
 ```
 When this flag is set, the SDK will automatically check for new versions during runtime regardless of the `checkForUpdates` parameter value.
 
-## Contributing
-We welcome contributions to this SDK! If you'd like to contribute, please submit a Pull Request or open an issue with any suggestions or bug reports.
-
-To generate the sdk from the openapi specs run:
-```bash
-python3 generate_sdk_csharp.py
-```
-
-To generate the documentation run:
-```bash
-python3 generate_sdk_docs.py [--use-cache]
-```
-
 ## Running Tests
 To run the tests, use the following command:
 ```bash
