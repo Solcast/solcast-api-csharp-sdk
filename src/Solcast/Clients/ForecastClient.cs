@@ -374,5 +374,183 @@ Error: {httpEx.Message}", httpEx);
 Parameters: {paramDetails}
 Error: {ex.Message}", ex);
             }
+        }
+        /// <param name="requestid"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="hours"></param>
+        /// <param name="period"></param>
+        /// <param name="cleaningthreshold"></param>
+        /// <param name="soilinglossrate"></param>
+        /// <param name="graceperiod"></param>
+        /// <param name="maxsoiling"></param>
+        /// <param name="initialsoiling"></param>
+        /// <param name="rainaccumperiod"></param>
+        public async Task<ApiResponse<ForecastResponse>> GetForecastSoiling(
+            string requestid = null,
+            double? latitude = null,
+            double? longitude = null,
+            int? hours = null,
+            string period = null,
+            int? cleaningthreshold = null,
+            double? soilinglossrate = null,
+            int? graceperiod = null,
+            double? maxsoiling = null,
+            double? initialsoiling = null,
+            int? rainaccumperiod = null
+        )
+        {
+            try
+            {
+                var parameters = new Dictionary<string, string>();
+                if (requestid != null) parameters.Add("requestid", requestid.ToString());
+                if (latitude.HasValue) parameters.Add("latitude", latitude.Value.ToString());
+                if (longitude.HasValue) parameters.Add("longitude", longitude.Value.ToString());
+                if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
+                if (period != null) parameters.Add("period", period.ToString());
+                if (cleaningthreshold.HasValue) parameters.Add("cleaningthreshold", cleaningthreshold.Value.ToString());
+                if (soilinglossrate.HasValue) parameters.Add("soilinglossrate", soilinglossrate.Value.ToString());
+                if (graceperiod.HasValue) parameters.Add("graceperiod", graceperiod.Value.ToString());
+                if (maxsoiling.HasValue) parameters.Add("maxsoiling", maxsoiling.Value.ToString());
+                if (initialsoiling.HasValue) parameters.Add("initialsoiling", initialsoiling.Value.ToString());
+                if (rainaccumperiod.HasValue) parameters.Add("rainaccumperiod", rainaccumperiod.Value.ToString());
+
+                var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
+                var response = await _httpClient.GetAsync(SolcastUrls.ForecastSoiling + $"?{queryString}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                var rawContent = await response.Content.ReadAsStringAsync();
+                
+                // Verbose output - useful for MCP scenarios and debugging
+                var verboseFlag = Environment.GetEnvironmentVariable("SOLCAST_VERBOSE_OUTPUT");
+                if (verboseFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    Console.Error.WriteLine("[Solcast] Raw Response: " + rawContent);
+                }
+
+                if (parameters.ContainsKey("format") && parameters["format"] == "json")
+                {
+                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
+                    return new ApiResponse<ForecastResponse>(data, rawContent);
+                }
+                return new ApiResponse<ForecastResponse>(null, rawContent);
+            }
+            catch (UnauthorizedApiKeyException)
+            {
+                throw;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                var paramDetails = "requestid=" + requestid + ", " + "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "cleaningthreshold=" + cleaningthreshold + ", " + "soilinglossrate=" + soilinglossrate + ", " + "graceperiod=" + graceperiod + ", " + "maxsoiling=" + maxsoiling + ", " + "initialsoiling=" + initialsoiling + ", " + "rainaccumperiod=" + rainaccumperiod;
+                var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
+                var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
+                throw new Exception($@"HTTP error in GetForecastSoiling
+Parameters: {paramDetails}
+Status Code: {status}
+Content: {content}
+Error: {httpEx.Message}", httpEx);
+            }
+            catch (Exception ex)
+            {
+                var paramDetails = "requestid=" + requestid + ", " + "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "cleaningthreshold=" + cleaningthreshold + ", " + "soilinglossrate=" + soilinglossrate + ", " + "graceperiod=" + graceperiod + ", " + "maxsoiling=" + maxsoiling + ", " + "initialsoiling=" + initialsoiling + ", " + "rainaccumperiod=" + rainaccumperiod;
+                throw new Exception($@"Unhandled error in GetForecastSoiling
+Parameters: {paramDetails}
+Error: {ex.Message}", ex);
+            }
+        }
+        /// <param name="requestid"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
+        /// <param name="hours"></param>
+        /// <param name="period"></param>
+        /// <param name="cleaningthreshold"></param>
+        /// <param name="soilinglossrate"></param>
+        /// <param name="graceperiod"></param>
+        /// <param name="maxsoiling"></param>
+        /// <param name="initialsoiling"></param>
+        /// <param name="rainaccumperiod"></param>
+        public async Task<ApiResponse<ForecastResponse>> GetForecastLosses(
+            string requestid = null,
+            double? latitude = null,
+            double? longitude = null,
+            int? hours = null,
+            string period = null,
+            int? cleaningthreshold = null,
+            double? soilinglossrate = null,
+            int? graceperiod = null,
+            double? maxsoiling = null,
+            double? initialsoiling = null,
+            int? rainaccumperiod = null
+        )
+        {
+            try
+            {
+                var parameters = new Dictionary<string, string>();
+                if (requestid != null) parameters.Add("requestid", requestid.ToString());
+                if (latitude.HasValue) parameters.Add("latitude", latitude.Value.ToString());
+                if (longitude.HasValue) parameters.Add("longitude", longitude.Value.ToString());
+                if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
+                if (period != null) parameters.Add("period", period.ToString());
+                if (cleaningthreshold.HasValue) parameters.Add("cleaningthreshold", cleaningthreshold.Value.ToString());
+                if (soilinglossrate.HasValue) parameters.Add("soilinglossrate", soilinglossrate.Value.ToString());
+                if (graceperiod.HasValue) parameters.Add("graceperiod", graceperiod.Value.ToString());
+                if (maxsoiling.HasValue) parameters.Add("maxsoiling", maxsoiling.Value.ToString());
+                if (initialsoiling.HasValue) parameters.Add("initialsoiling", initialsoiling.Value.ToString());
+                if (rainaccumperiod.HasValue) parameters.Add("rainaccumperiod", rainaccumperiod.Value.ToString());
+
+                var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
+                var response = await _httpClient.GetAsync(SolcastUrls.ForecastLosses + $"?{queryString}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                var rawContent = await response.Content.ReadAsStringAsync();
+                
+                // Verbose output - useful for MCP scenarios and debugging
+                var verboseFlag = Environment.GetEnvironmentVariable("SOLCAST_VERBOSE_OUTPUT");
+                if (verboseFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    Console.Error.WriteLine("[Solcast] Raw Response: " + rawContent);
+                }
+
+                if (parameters.ContainsKey("format") && parameters["format"] == "json")
+                {
+                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
+                    return new ApiResponse<ForecastResponse>(data, rawContent);
+                }
+                return new ApiResponse<ForecastResponse>(null, rawContent);
+            }
+            catch (UnauthorizedApiKeyException)
+            {
+                throw;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                var paramDetails = "requestid=" + requestid + ", " + "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "cleaningthreshold=" + cleaningthreshold + ", " + "soilinglossrate=" + soilinglossrate + ", " + "graceperiod=" + graceperiod + ", " + "maxsoiling=" + maxsoiling + ", " + "initialsoiling=" + initialsoiling + ", " + "rainaccumperiod=" + rainaccumperiod;
+                var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
+                var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
+                throw new Exception($@"HTTP error in GetForecastLosses
+Parameters: {paramDetails}
+Status Code: {status}
+Content: {content}
+Error: {httpEx.Message}", httpEx);
+            }
+            catch (Exception ex)
+            {
+                var paramDetails = "requestid=" + requestid + ", " + "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "cleaningthreshold=" + cleaningthreshold + ", " + "soilinglossrate=" + soilinglossrate + ", " + "graceperiod=" + graceperiod + ", " + "maxsoiling=" + maxsoiling + ", " + "initialsoiling=" + initialsoiling + ", " + "rainaccumperiod=" + rainaccumperiod;
+                throw new Exception($@"Unhandled error in GetForecastLosses
+Parameters: {paramDetails}
+Error: {ex.Message}", ex);
+            }
         }    }
 }
