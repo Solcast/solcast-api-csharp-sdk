@@ -30,7 +30,7 @@ namespace Solcast.Clients
         /// <param name="applyTrackerInactive">Indicating if trackers are inactive. If True, panels are assumed all facing up (i.e. zero rotation). Only has effect if your site has a tracking_type that is not “fixed”.</param>
         /// <param name="terrainShading">If true, irradiance parameters are modified based on the surrounding terrain from a 90m-horizontal-resolution digital elevation model. The direct component of irradiance is set to zero when the beam from the sun is blocked by the terrain. The diffuse component of irradiance is reduced throughout the day if the sky view at the location is significantly reduced by the surrounding terrain. Global irradiance incorporates both effects.</param>
         /// <param name="format">Response format</param>
-        public async Task<ApiResponse<ForecastResponse>> GetForecastAdvancedPvPower(
+        public async Task<ApiResponse<ForecastsDataResponse>> GetForecastAdvancedPvPower(
             string resourceId,
             int? hours = null,
             List<string> outputParameters = null,
@@ -80,10 +80,10 @@ namespace Solcast.Clients
 
                 if (parameters.ContainsKey("format") && parameters["format"] == "json")
                 {
-                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
-                    return new ApiResponse<ForecastResponse>(data, rawContent);
+                    var data = JsonConvert.DeserializeObject<ForecastsDataResponse>(rawContent);
+                    return new ApiResponse<ForecastsDataResponse>(data, rawContent);
                 }
-                return new ApiResponse<ForecastResponse>(null, rawContent);
+                return new ApiResponse<ForecastsDataResponse>(null, rawContent);
             }
             catch (UnauthorizedApiKeyException)
             {
@@ -206,7 +206,7 @@ Error: {ex.Message}", ex);
         /// <param name="outputParameters">The output parameters to include in the response.</param>
         /// <param name="terrainShading">If true, irradiance parameters are modified based on the surrounding terrain from a 90m-horizontal-resolution digital elevation model. The direct component of irradiance is set to zero when the beam from the sun is blocked by the terrain. The diffuse component of irradiance is reduced throughout the day if the sky view at the location is significantly reduced by the surrounding terrain. Global irradiance incorporates both effects.</param>
         /// <param name="format">Response format</param>
-        public async Task<ApiResponse<ForecastResponse>> GetForecastRooftopPvPower(
+        public async Task<ApiResponse<ForecastsDataResponse>> GetForecastRooftopPvPower(
             double? latitude,
             double? longitude,
             float? capacity,
@@ -258,10 +258,10 @@ Error: {ex.Message}", ex);
 
                 if (parameters.ContainsKey("format") && parameters["format"] == "json")
                 {
-                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
-                    return new ApiResponse<ForecastResponse>(data, rawContent);
+                    var data = JsonConvert.DeserializeObject<ForecastsDataResponse>(rawContent);
+                    return new ApiResponse<ForecastsDataResponse>(data, rawContent);
                 }
-                return new ApiResponse<ForecastResponse>(null, rawContent);
+                return new ApiResponse<ForecastsDataResponse>(null, rawContent);
             }
             catch (UnauthorizedApiKeyException)
             {
@@ -299,7 +299,7 @@ Error: {ex.Message}", ex);
         /// <param name="latitude">The latitude of the location you request data for. Must be a decimal number between -90 and 90.</param>
         /// <param name="longitude">The longitude of the location you request data for. Must be a decimal number between -180 and 180.</param>
         /// <param name="format">Response format</param>
-        public async Task<ApiResponse<ForecastResponse>> GetForecastRadiationAndWeather(
+        public async Task<ApiResponse<ForecastsDataResponse>> GetForecastRadiationAndWeather(
             double? latitude,
             double? longitude,
             int? hours = null,
@@ -347,10 +347,10 @@ Error: {ex.Message}", ex);
 
                 if (parameters.ContainsKey("format") && parameters["format"] == "json")
                 {
-                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
-                    return new ApiResponse<ForecastResponse>(data, rawContent);
+                    var data = JsonConvert.DeserializeObject<ForecastsDataResponse>(rawContent);
+                    return new ApiResponse<ForecastsDataResponse>(data, rawContent);
                 }
-                return new ApiResponse<ForecastResponse>(null, rawContent);
+                return new ApiResponse<ForecastsDataResponse>(null, rawContent);
             }
             catch (UnauthorizedApiKeyException)
             {
