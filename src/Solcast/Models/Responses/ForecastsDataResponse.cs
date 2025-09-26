@@ -3,10 +3,10 @@ using Newtonsoft.Json;
 
 namespace Solcast.Models
 {
-    public class HistoricRadiationAndWeatherResponse
+    public class ForecastsDataResponse
     {
-        [JsonProperty("estimated_actuals")]
-        public List<Dictionary<string, object>> EstimatedActuals { get; set; }
+        [JsonProperty("forecasts")]
+        public List<Dictionary<string, object>> Forecasts { get; set; }
 
         [JsonProperty("override_format_version")]
         public string OverrideFormatVersion { get; set; }
