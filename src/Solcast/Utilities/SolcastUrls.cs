@@ -11,17 +11,20 @@ namespace Solcast
         public static readonly string LiveAggregations = "data/live/aggregations";
         public static readonly string LiveRooftopPvPower = "data/live/rooftop_pv_power";
         public static readonly string LiveRadiationAndWeather = "data/live/radiation_and_weather";
+        public static readonly string LiveSoilingKimber = "data/live/soiling/kimber";
 
         // forecast data endpoints
         public static readonly string ForecastAdvancedPvPower = "data/forecast/advanced_pv_power";
         public static readonly string ForecastAggregations = "data/forecast/aggregations";
         public static readonly string ForecastRooftopPvPower = "data/forecast/rooftop_pv_power";
         public static readonly string ForecastRadiationAndWeather = "data/forecast/radiation_and_weather";
+        public static readonly string ForecastSoilingKimber = "data/forecast/soiling/kimber";
 
         // historic data endpoints
         public static readonly string HistoricAdvancedPvPower = "data/historic/advanced_pv_power";
         public static readonly string HistoricRadiationAndWeather = "data/historic/radiation_and_weather";
         public static readonly string HistoricRooftopPvPower = "data/historic/rooftop_pv_power";
+        public static readonly string HistoricSoilingKimber = "data/historic/soiling/kimber";
 
         // tmy data endpoints
         public static readonly string TmyAdvancedPvPower = "data/tmy/advanced_pv_power";

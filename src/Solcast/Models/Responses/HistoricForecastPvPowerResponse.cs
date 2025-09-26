@@ -7,5 +7,8 @@ namespace Solcast.Models
     {
         [JsonProperty("historic_forecasts")]
         public List<Dictionary<string, object>> HistoricForecasts { get; set; }
+
+        [JsonProperty("override_format_version")]
+        public string OverrideFormatVersion { get; set; }
     }
 }

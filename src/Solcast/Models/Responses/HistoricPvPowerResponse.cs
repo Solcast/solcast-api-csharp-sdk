@@ -7,5 +7,8 @@ namespace Solcast.Models
     {
         [JsonProperty("estimated_actuals")]
         public List<Dictionary<string, object>> EstimatedActuals { get; set; }
+
+        [JsonProperty("override_format_version")]
+        public string OverrideFormatVersion { get; set; }
     }
 }
