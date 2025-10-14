@@ -30,7 +30,7 @@ namespace Solcast.Clients
         /// <param name="applyTrackerInactive">Indicating if trackers are inactive. If True, panels are assumed all facing up (i.e. zero rotation). Only has effect if your site has a tracking_type that is not “fixed”.</param>
         /// <param name="terrainShading">If true, irradiance parameters are modified based on the surrounding terrain from a 90m-horizontal-resolution digital elevation model. The direct component of irradiance is set to zero when the beam from the sun is blocked by the terrain. The diffuse component of irradiance is reduced throughout the day if the sky view at the location is significantly reduced by the surrounding terrain. Global irradiance incorporates both effects.</param>
         /// <param name="format">Response format</param>
-        public async Task<ApiResponse<ForecastResponse>> GetForecastAdvancedPvPower(
+        public async Task<ApiResponse<ForecastsDataResponse>> GetForecastAdvancedPvPower(
             string resourceId,
             int? hours = null,
             List<string> outputParameters = null,
@@ -80,10 +80,10 @@ namespace Solcast.Clients
 
                 if (parameters.ContainsKey("format") && parameters["format"] == "json")
                 {
-                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
-                    return new ApiResponse<ForecastResponse>(data, rawContent);
+                    var data = JsonConvert.DeserializeObject<ForecastsDataResponse>(rawContent);
+                    return new ApiResponse<ForecastsDataResponse>(data, rawContent);
                 }
-                return new ApiResponse<ForecastResponse>(null, rawContent);
+                return new ApiResponse<ForecastsDataResponse>(null, rawContent);
             }
             catch (UnauthorizedApiKeyException)
             {
@@ -206,7 +206,7 @@ Error: {ex.Message}", ex);
         /// <param name="outputParameters">The output parameters to include in the response.</param>
         /// <param name="terrainShading">If true, irradiance parameters are modified based on the surrounding terrain from a 90m-horizontal-resolution digital elevation model. The direct component of irradiance is set to zero when the beam from the sun is blocked by the terrain. The diffuse component of irradiance is reduced throughout the day if the sky view at the location is significantly reduced by the surrounding terrain. Global irradiance incorporates both effects.</param>
         /// <param name="format">Response format</param>
-        public async Task<ApiResponse<ForecastResponse>> GetForecastRooftopPvPower(
+        public async Task<ApiResponse<ForecastsDataResponse>> GetForecastRooftopPvPower(
             double? latitude,
             double? longitude,
             float? capacity,
@@ -258,10 +258,10 @@ Error: {ex.Message}", ex);
 
                 if (parameters.ContainsKey("format") && parameters["format"] == "json")
                 {
-                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
-                    return new ApiResponse<ForecastResponse>(data, rawContent);
+                    var data = JsonConvert.DeserializeObject<ForecastsDataResponse>(rawContent);
+                    return new ApiResponse<ForecastsDataResponse>(data, rawContent);
                 }
-                return new ApiResponse<ForecastResponse>(null, rawContent);
+                return new ApiResponse<ForecastsDataResponse>(null, rawContent);
             }
             catch (UnauthorizedApiKeyException)
             {
@@ -299,7 +299,7 @@ Error: {ex.Message}", ex);
         /// <param name="latitude">The latitude of the location you request data for. Must be a decimal number between -90 and 90.</param>
         /// <param name="longitude">The longitude of the location you request data for. Must be a decimal number between -180 and 180.</param>
         /// <param name="format">Response format</param>
-        public async Task<ApiResponse<ForecastResponse>> GetForecastRadiationAndWeather(
+        public async Task<ApiResponse<ForecastsDataResponse>> GetForecastRadiationAndWeather(
             double? latitude,
             double? longitude,
             int? hours = null,
@@ -347,10 +347,10 @@ Error: {ex.Message}", ex);
 
                 if (parameters.ContainsKey("format") && parameters["format"] == "json")
                 {
-                    var data = JsonConvert.DeserializeObject<ForecastResponse>(rawContent);
-                    return new ApiResponse<ForecastResponse>(data, rawContent);
+                    var data = JsonConvert.DeserializeObject<ForecastsDataResponse>(rawContent);
+                    return new ApiResponse<ForecastsDataResponse>(data, rawContent);
                 }
-                return new ApiResponse<ForecastResponse>(null, rawContent);
+                return new ApiResponse<ForecastsDataResponse>(null, rawContent);
             }
             catch (UnauthorizedApiKeyException)
             {
@@ -371,6 +371,101 @@ Error: {httpEx.Message}", httpEx);
             {
                 var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "tilt=" + tilt + ", " + "azimuth=" + azimuth + ", " + "arrayType=" + arrayType + ", " + "outputParameters=" + outputParameters + ", " + "terrainShading=" + terrainShading + ", " + "format=" + format;
                 throw new Exception($@"Unhandled error in GetForecastRadiationAndWeather
+Parameters: {paramDetails}
+Error: {ex.Message}", ex);
+            }
+        }
+        /// <summary>
+        /// Get soiling loss forecasts using the Kimber model for the requested location from the present up to 14 days ahead.
+        /// </summary>
+        /// <param name="latitude">The latitude of the location you request data for. Must be a decimal number between -90 and 90.</param>
+        /// <param name="longitude">The longitude of the location you request data for. Must be a decimal number between -180 and 180.</param>
+        /// <param name="timeZone">Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset.</param>
+        /// <param name="hours">The number of hours to return in the response.</param>
+        /// <param name="period">Length of the averaging period in ISO 8601 format.</param>
+        /// <param name="cleaningThreshold">Amount of daily rainfall required to clean the panels (mm)</param>
+        /// <param name="soilingLossRate">Percentage of energy lost due to one day of soiling.</param>
+        /// <param name="gracePeriod">Number of days after a rainfall event when it’s assumed the ground is damp, and so it’s assumed there is no soiling.</param>
+        /// <param name="maxSoiling">Maximum percentage of energy lost due to soiling. Soiling will build up until this value.</param>
+        /// <param name="initialSoiling">Initial percentage of energy lost due to soiling at time zero in the rainfall series input.</param>
+        /// <param name="manualWashDates">A list of ISO 8601 compliant dates or a repeating interval when manual cleaning of the panels occurred.</param>
+        /// <param name="format">Response format</param>
+        public async Task<ApiResponse<ForecastsDataResponse>> GetForecastKimber(
+            double? latitude,
+            double? longitude,
+            string timeZone = null,
+            int? hours = null,
+            string period = null,
+            double? cleaningThreshold = null,
+            double? soilingLossRate = null,
+            int? gracePeriod = null,
+            double? maxSoiling = null,
+            double? initialSoiling = null,
+            List<string> manualWashDates = null,
+            string format = null
+        )
+        {
+            try
+            {
+                var parameters = new Dictionary<string, string>();
+                parameters.Add("latitude", latitude.ToString());
+                parameters.Add("longitude", longitude.ToString());
+                if (timeZone != null) parameters.Add("timeZone", timeZone.ToString());
+                if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
+                if (period != null) parameters.Add("period", period.ToString());
+                if (cleaningThreshold.HasValue) parameters.Add("cleaningThreshold", cleaningThreshold.Value.ToString());
+                if (soilingLossRate.HasValue) parameters.Add("soilingLossRate", soilingLossRate.Value.ToString());
+                if (gracePeriod.HasValue) parameters.Add("gracePeriod", gracePeriod.Value.ToString());
+                if (maxSoiling.HasValue) parameters.Add("maxSoiling", maxSoiling.Value.ToString());
+                if (initialSoiling.HasValue) parameters.Add("initialSoiling", initialSoiling.Value.ToString());
+                if (manualWashDates != null && manualWashDates.Any()) parameters.Add("manualWashDates", string.Join(",", manualWashDates));
+                if (format != null) parameters.Add("format", format.ToString());
+
+                var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
+                var response = await _httpClient.GetAsync(SolcastUrls.ForecastSoilingKimber + $"?{queryString}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                var rawContent = await response.Content.ReadAsStringAsync();
+                
+                // Verbose output - useful for MCP scenarios and debugging
+                var verboseFlag = Environment.GetEnvironmentVariable("SOLCAST_VERBOSE_OUTPUT");
+                if (verboseFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    Console.Error.WriteLine("[Solcast] Raw Response: " + rawContent);
+                }
+
+                if (parameters.ContainsKey("format") && parameters["format"] == "json")
+                {
+                    var data = JsonConvert.DeserializeObject<ForecastsDataResponse>(rawContent);
+                    return new ApiResponse<ForecastsDataResponse>(data, rawContent);
+                }
+                return new ApiResponse<ForecastsDataResponse>(null, rawContent);
+            }
+            catch (UnauthorizedApiKeyException)
+            {
+                throw;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "timeZone=" + timeZone + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "soilingLossRate=" + soilingLossRate + ", " + "gracePeriod=" + gracePeriod + ", " + "maxSoiling=" + maxSoiling + ", " + "initialSoiling=" + initialSoiling + ", " + "manualWashDates=" + manualWashDates + ", " + "format=" + format;
+                var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
+                var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
+                throw new Exception($@"HTTP error in GetForecastKimber
+Parameters: {paramDetails}
+Status Code: {status}
+Content: {content}
+Error: {httpEx.Message}", httpEx);
+            }
+            catch (Exception ex)
+            {
+                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "timeZone=" + timeZone + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "soilingLossRate=" + soilingLossRate + ", " + "gracePeriod=" + gracePeriod + ", " + "maxSoiling=" + maxSoiling + ", " + "initialSoiling=" + initialSoiling + ", " + "manualWashDates=" + manualWashDates + ", " + "format=" + format;
+                throw new Exception($@"Unhandled error in GetForecastKimber
 Parameters: {paramDetails}
 Error: {ex.Message}", ex);
             }
