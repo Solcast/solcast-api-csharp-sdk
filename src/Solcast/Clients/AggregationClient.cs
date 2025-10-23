@@ -94,7 +94,7 @@ Error: {ex.Message}", ex);
             }
         }        
         /// <summary>
-        /// Get forecast aggregation data for up to 7 days of data at a time for a requested collection or aggregation.
+        /// Get forecast aggregation data for up to 14 days of data at a time for a requested collection or aggregation.
         /// </summary>
         /// <param name="outputParameters">The output parameters to include in the response.</param>
         /// <param name="collectionId">Unique identifier for your collection.</param>
