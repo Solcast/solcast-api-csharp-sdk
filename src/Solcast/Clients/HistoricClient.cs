@@ -328,5 +328,103 @@ Error: {httpEx.Message}", httpEx);
 Parameters: {paramDetails}
 Error: {ex.Message}", ex);
             }
+        }
+        /// <param name="latitude">The latitude of the location you request data for. Must be a decimal number between -90 and 90.</param>
+        /// <param name="longitude">The longitude of the location you request data for. Must be a decimal number between -180 and 180.</param>
+        /// <param name="timeZone">Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset.</param>
+        /// <param name="period">Length of the averaging period in ISO 8601 format.</param>
+        /// <param name="start">ISO_8601 compliant starting datetime for the historical data. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed.</param>
+        /// <param name="duration">Must include one of end_date and duration. ISO_8601 compliant duration for the historical data. Must be within 31 days of the start_date.</param>
+        /// <param name="end">Must include one of end_date and duration. ISO_8601 compliant ending datetime for the historical data. Must be within 31 days of the start_date. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed.</param>
+        /// <param name="cleaningThreshold">Amount of daily rainfall required to clean the panels (mm)</param>
+        /// <param name="soilingLossRate">Percentage of energy lost due to one day of soiling.</param>
+        /// <param name="gracePeriod">Number of days after a rainfall event when it’s assumed the ground is damp, and so it’s assumed there is no soiling.</param>
+        /// <param name="maxSoiling">Maximum percentage of energy lost due to soiling. Soiling will build up until this value.</param>
+        /// <param name="initialSoiling">Initial percentage of energy lost due to soiling at time zero in the rainfall series input.</param>
+        /// <param name="manualWashDates">A list of ISO 8601 compliant dates or a repeating interval when manual cleaning of the panels occurred.</param>
+        /// <param name="format">Response format</param>
+        public async Task<ApiResponse<EstimatedActualsDataResponse>> GetHistoricKimber(
+            double? latitude,
+            double? longitude,
+            string start,
+            string timeZone = null,
+            string period = null,
+            string duration = null,
+            string end = null,
+            double? cleaningThreshold = null,
+            double? soilingLossRate = null,
+            int? gracePeriod = null,
+            double? maxSoiling = null,
+            double? initialSoiling = null,
+            List<string> manualWashDates = null,
+            string format = null
+        )
+        {
+            try
+            {
+                var parameters = new Dictionary<string, string>();
+                parameters.Add("latitude", latitude.ToString());
+                parameters.Add("longitude", longitude.ToString());
+                parameters.Add("start", start.ToString());
+                if (timeZone != null) parameters.Add("timeZone", timeZone.ToString());
+                if (period != null) parameters.Add("period", period.ToString());
+                if (duration != null) parameters.Add("duration", duration.ToString());
+                if (end != null) parameters.Add("end", end.ToString());
+                if (cleaningThreshold.HasValue) parameters.Add("cleaningThreshold", cleaningThreshold.Value.ToString());
+                if (soilingLossRate.HasValue) parameters.Add("soilingLossRate", soilingLossRate.Value.ToString());
+                if (gracePeriod.HasValue) parameters.Add("gracePeriod", gracePeriod.Value.ToString());
+                if (maxSoiling.HasValue) parameters.Add("maxSoiling", maxSoiling.Value.ToString());
+                if (initialSoiling.HasValue) parameters.Add("initialSoiling", initialSoiling.Value.ToString());
+                if (manualWashDates != null && manualWashDates.Any()) parameters.Add("manualWashDates", string.Join(",", manualWashDates));
+                if (format != null) parameters.Add("format", format.ToString());
+
+                var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
+                var response = await _httpClient.GetAsync(SolcastUrls.HistoricSoilingKimber + $"?{queryString}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedApiKeyException("The API key provided is invalid or unauthorized.");
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                var rawContent = await response.Content.ReadAsStringAsync();
+                
+                // Verbose output - useful for MCP scenarios and debugging
+                var verboseFlag = Environment.GetEnvironmentVariable("SOLCAST_VERBOSE_OUTPUT");
+                if (verboseFlag?.Equals("true", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    Console.Error.WriteLine("[Solcast] Raw Response: " + rawContent);
+                }
+
+                if (parameters.ContainsKey("format") && parameters["format"] == "json")
+                {
+                    var data = JsonConvert.DeserializeObject<EstimatedActualsDataResponse>(rawContent);
+                    return new ApiResponse<EstimatedActualsDataResponse>(data, rawContent);
+                }
+                return new ApiResponse<EstimatedActualsDataResponse>(null, rawContent);
+            }
+            catch (UnauthorizedApiKeyException)
+            {
+                throw;
+            }
+            catch (HttpRequestException httpEx)
+            {
+                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "start=" + start + ", " + "timeZone=" + timeZone + ", " + "period=" + period + ", " + "duration=" + duration + ", " + "end=" + end + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "soilingLossRate=" + soilingLossRate + ", " + "gracePeriod=" + gracePeriod + ", " + "maxSoiling=" + maxSoiling + ", " + "initialSoiling=" + initialSoiling + ", " + "manualWashDates=" + manualWashDates + ", " + "format=" + format;
+                var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
+                var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
+                throw new Exception($@"HTTP error in GetHistoricKimber
+Parameters: {paramDetails}
+Status Code: {status}
+Content: {content}
+Error: {httpEx.Message}", httpEx);
+            }
+            catch (Exception ex)
+            {
+                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "start=" + start + ", " + "timeZone=" + timeZone + ", " + "period=" + period + ", " + "duration=" + duration + ", " + "end=" + end + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "soilingLossRate=" + soilingLossRate + ", " + "gracePeriod=" + gracePeriod + ", " + "maxSoiling=" + maxSoiling + ", " + "initialSoiling=" + initialSoiling + ", " + "manualWashDates=" + manualWashDates + ", " + "format=" + format;
+                throw new Exception($@"Unhandled error in GetHistoricKimber
+Parameters: {paramDetails}
+Error: {ex.Message}", ex);
+            }
         }    }
 }
