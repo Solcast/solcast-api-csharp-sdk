@@ -12,6 +12,21 @@ namespace Solcast.Models
         public string ResourceId { get; set; } // Required
 
         /// <summary>
+        /// Type of resource (e.g. standard, premium).
+        /// </summary>
+        [JsonProperty("resource_type")]
+        public string ResourceType { get; set; }
+
+        /// <summary>
+        /// Forecast collections and associated data series metadata for this resource.
+        /// </summary>
+        [JsonProperty("forecast_collections")]
+        public List<PvPowerForecastCollection> ForecastCollections { get; set; }
+
+        [JsonProperty("confirmed_metadata")]
+        public string ConfirmedMetadata { get; set; }
+
+        /// <summary>
         /// The name of the resource.
         /// </summary>
         [JsonProperty("name")]
@@ -184,8 +199,5 @@ namespace Solcast.Models
 
         [JsonProperty("cloudy_zenith_coefficients")]
         public List<ZenithCoefficients> CloudyZenithCoefficients { get; set; }
-
-        [JsonProperty("confirmed_metadata")]
-        public string ConfirmedMetadata { get; set; }
     }
 }

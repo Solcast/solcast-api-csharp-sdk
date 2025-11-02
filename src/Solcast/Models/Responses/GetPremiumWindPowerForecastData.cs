@@ -2,19 +2,13 @@ using Newtonsoft.Json;
 
 namespace Solcast.Models
 {
-    public class ListPvPowerResources
+    public class GetPremiumWindPowerForecastData
     {
         /// <summary>
-        /// When true, forecast collections and series metadata are included in responses.
+        /// Premium Power data series identifier.
         /// </summary>
-        [JsonProperty("include_forecast_collections")]
-        public bool? IncludeForecastCollections { get; set; }
-
-        /// <summary>
-        /// Type of resource (e.g. standard, premium).
-        /// </summary>
-        [JsonProperty("resource_type")]
-        public string ResourceType { get; set; }
+        [JsonProperty("data_series_id")]
+        public string DataSeriesId { get; set; } // Required
 
         /// <summary>
         /// Desired output format (e.g. json, csv).
@@ -23,7 +17,7 @@ namespace Solcast.Models
         public string Format { get; set; }
 
         /// <summary>
-        /// API key used to authorise the request.
+        /// API key used to authorize the request.
         /// </summary>
         [JsonProperty("api_key")]
         public string ApiKey { get; set; }

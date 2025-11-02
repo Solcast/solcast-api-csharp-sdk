@@ -16,13 +16,27 @@ namespace Solcast.Clients
         {
         }
 
+        /// <param name="includeForecastCollections">When true, forecast collections and series metadata are included in responses.</param>
+        /// <param name="resourceType">Type of resource (e.g. standard, premium).</param>
+        /// <param name="format">Desired output format (e.g. json, csv).</param>
+        /// <param name="apiKey">API key used to authorise the request.</param>
+        /// <param name="jsconfig">Custom JSON configuration applied to the response.</param>
         public async Task<ApiResponse<string>> GetPvPowerSites(
-
+            bool? includeForecastCollections = null,
+            string resourceType = null,
+            string format = null,
+            string apiKey = null,
+            string jsconfig = null
         )
         {
             try
             {
                 var parameters = new Dictionary<string, string>();
+                if (includeForecastCollections.HasValue) parameters.Add("includeForecastCollections", includeForecastCollections.Value.ToString());
+                if (resourceType != null) parameters.Add("resourceType", resourceType.ToString());
+                if (format != null) parameters.Add("format", format.ToString());
+                if (apiKey != null) parameters.Add("apiKey", apiKey.ToString());
+                if (jsconfig != null) parameters.Add("jsconfig", jsconfig.ToString());
 
                 var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
                 var response = await _httpClient.GetAsync(SolcastUrls.PvPowerSites + $"?{queryString}");
@@ -56,7 +70,7 @@ namespace Solcast.Clients
             }
             catch (HttpRequestException httpEx)
             {
-                var paramDetails = "no parameters";
+                var paramDetails = "includeForecastCollections=" + includeForecastCollections + ", " + "resourceType=" + resourceType + ", " + "format=" + format + ", " + "apiKey=" + apiKey + ", " + "jsconfig=" + jsconfig;
                 var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
                 var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
                 throw new Exception($@"HTTP error in GetPvPowerSites
@@ -67,21 +81,36 @@ Error: {httpEx.Message}", httpEx);
             }
             catch (Exception ex)
             {
-                var paramDetails = "no parameters";
+                var paramDetails = "includeForecastCollections=" + includeForecastCollections + ", " + "resourceType=" + resourceType + ", " + "format=" + format + ", " + "apiKey=" + apiKey + ", " + "jsconfig=" + jsconfig;
                 throw new Exception($@"Unhandled error in GetPvPowerSites
 Parameters: {paramDetails}
 Error: {ex.Message}", ex);
             }
         }
         /// <param name="resourceId">The unique identifier of the resource.</param>
+        /// <param name="includeForecastCollections">When true, forecast collections and series metadata are included in the response.</param>
+        /// <param name="resourceType">Type of resource (e.g. standard, premium).</param>
+        /// <param name="format">Desired output format (e.g. json, csv).</param>
+        /// <param name="apiKey">API key used to authorise the request.</param>
+        /// <param name="jsconfig">Custom JSON configuration applied to the response.</param>
         public async Task<ApiResponse<PvPowerResource>> GetPvPowerSite(
-            string resourceId
+            string resourceId,
+            bool? includeForecastCollections = null,
+            string resourceType = null,
+            string format = null,
+            string apiKey = null,
+            string jsconfig = null
         )
         {
             try
             {
                 var parameters = new Dictionary<string, string>();
                 parameters.Add("resourceId", resourceId.ToString());
+                if (includeForecastCollections.HasValue) parameters.Add("includeForecastCollections", includeForecastCollections.Value.ToString());
+                if (resourceType != null) parameters.Add("resourceType", resourceType.ToString());
+                if (format != null) parameters.Add("format", format.ToString());
+                if (apiKey != null) parameters.Add("apiKey", apiKey.ToString());
+                if (jsconfig != null) parameters.Add("jsconfig", jsconfig.ToString());
 
                 var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
                 var response = await _httpClient.GetAsync(SolcastUrls.PvPowerSite + $"?{queryString}");
@@ -115,7 +144,7 @@ Error: {ex.Message}", ex);
             }
             catch (HttpRequestException httpEx)
             {
-                var paramDetails = "resourceId=" + resourceId;
+                var paramDetails = "resourceId=" + resourceId + ", " + "includeForecastCollections=" + includeForecastCollections + ", " + "resourceType=" + resourceType + ", " + "format=" + format + ", " + "apiKey=" + apiKey + ", " + "jsconfig=" + jsconfig;
                 var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
                 var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
                 throw new Exception($@"HTTP error in GetPvPowerSite
@@ -126,7 +155,7 @@ Error: {httpEx.Message}", httpEx);
             }
             catch (Exception ex)
             {
-                var paramDetails = "resourceId=" + resourceId;
+                var paramDetails = "resourceId=" + resourceId + ", " + "includeForecastCollections=" + includeForecastCollections + ", " + "resourceType=" + resourceType + ", " + "format=" + format + ", " + "apiKey=" + apiKey + ", " + "jsconfig=" + jsconfig;
                 throw new Exception($@"Unhandled error in GetPvPowerSite
 Parameters: {paramDetails}
 Error: {ex.Message}", ex);
