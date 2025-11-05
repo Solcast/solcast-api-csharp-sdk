@@ -6,42 +6,6 @@ namespace Solcast.Models
     public class PvPowerResource
     {
         /// <summary>
-        /// The unique identifier of the resource.
-        /// </summary>
-        [JsonProperty("resource_id")]
-        public string ResourceId { get; set; } // Required
-
-        /// <summary>
-        /// The name of the resource.
-        /// </summary>
-        [JsonProperty("name")]
-        public string Name { get; set; } // Required
-
-        /// <summary>
-        /// The latitude of the resource. Must be a decimal number between -90 and 90.
-        /// </summary>
-        [JsonProperty("latitude")]
-        public double? Latitude { get; set; } // Required
-
-        /// <summary>
-        /// The longitude of the resource. Must be a decimal number between -180 and 180.
-        /// </summary>
-        [JsonProperty("longitude")]
-        public double? Longitude { get; set; } // Required
-
-        /// <summary>
-        /// Total inverter (nameplate) capacity in MW. This is the highest potential output of the system before any Site Export Limit is applied. It is used to model the conversion of DC power to AC by your inverters.
-        /// </summary>
-        [JsonProperty("capacity")]
-        public double? Capacity { get; set; }
-
-        /// <summary>
-        /// Total module capacity in MW. Usually slightly higher than the AC capacity. It is used to model the generation of DC power by your modules.
-        /// </summary>
-        [JsonProperty("capacity_dc")]
-        public double? CapacityDc { get; set; }
-
-        /// <summary>
         /// The angle from true north the modules are facing. North is 0, South is &#177;180, Eastward facing is negative values. Westward facing is positive values. For example, -90 is due east. It is used to calculate the incident irradiance for your modules.
         /// </summary>
         [JsonProperty("azimuth")]
@@ -52,18 +16,6 @@ namespace Solcast.Models
         /// </summary>
         [JsonProperty("tilt")]
         public double? Tilt { get; set; }
-
-        /// <summary>
-        /// The type of sun-tracking or geometry configuration of your site's modules. It is used to calculate the incident irradiance for your modules.
-        /// </summary>
-        [JsonProperty("tracking_type")]
-        public string TrackingType { get; set; }
-
-        /// <summary>
-        /// The date when your site was installed. It is used to derate your module (DC) production gradually with age, at a rate dependent on your Module Type.
-        /// </summary>
-        [JsonProperty("install_date")]
-        public string InstallDate { get; set; }
 
         /// <summary>
         /// The maximum power export limit in MW that is allowed by the site’s connection with the network operator. It is used to place a final cap on your AC power output. Only impacts your AC power if the grid export limit is set lower than the AC capacity.
@@ -187,5 +139,53 @@ namespace Solcast.Models
 
         [JsonProperty("confirmed_metadata")]
         public string ConfirmedMetadata { get; set; }
+
+        /// <summary>
+        /// Total module capacity in MW. Usually slightly higher than the AC capacity. It is used to model the generation of DC power by your modules.
+        /// </summary>
+        [JsonProperty("capacity_dc")]
+        public double? CapacityDc { get; set; }
+
+        /// <summary>
+        /// The type of sun-tracking or geometry configuration of your site's modules. It is used to calculate the incident irradiance for your modules.
+        /// </summary>
+        [JsonProperty("tracking_type")]
+        public string TrackingType { get; set; }
+
+        /// <summary>
+        /// The unique identifier of the resource.
+        /// </summary>
+        [JsonProperty("resource_id")]
+        public string ResourceId { get; set; } // Required
+
+        /// <summary>
+        /// The name of the resource.
+        /// </summary>
+        [JsonProperty("name")]
+        public string Name { get; set; } // Required
+
+        /// <summary>
+        /// The latitude of the resource. Must be a decimal number between -90 and 90.
+        /// </summary>
+        [JsonProperty("latitude")]
+        public double? Latitude { get; set; } // Required
+
+        /// <summary>
+        /// The longitude of the resource. Must be a decimal number between -180 and 180.
+        /// </summary>
+        [JsonProperty("longitude")]
+        public double? Longitude { get; set; } // Required
+
+        /// <summary>
+        /// Total inverter (nameplate) capacity in MW. This is the highest potential output of the system before any Site Export Limit is applied. It is used to model the conversion of DC power to AC by your inverters.
+        /// </summary>
+        [JsonProperty("capacity")]
+        public double? Capacity { get; set; }
+
+        /// <summary>
+        /// The date when your site was installed. It is used to derate your module (DC) production gradually with age, at a rate dependent on your Module Type.
+        /// </summary>
+        [JsonProperty("install_date")]
+        public string InstallDate { get; set; }
     }
 }
