@@ -377,20 +377,20 @@ Error: {ex.Message}", ex);
         }
         /// <param name="latitude">The latitude of the location you request data for. Must be a decimal number between -90 and 90.</param>
         /// <param name="longitude">The longitude of the location you request data for. Must be a decimal number between -180 and 180.</param>
-        /// <param name="timeZone">Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset.</param>
-        /// <param name="hours">The number of hours to return in the response.</param>
-        /// <param name="period">Length of the averaging period in ISO 8601 format.</param>
-        /// <param name="depoVelocPm10">Deposition Velocity for PM10.</param>
-        /// <param name="depoVelocPm2.5">Deposition Velocity for PM2.5.</param>
-        /// <param name="pm10">Restricted. A list of PM10 values. Concentration of airborne particulate matter (PM) with aerodynamicdiameter less than 10 microns. [g/m^3] HSU endpoint will internally use Solcast's PM10 values tailored to your request time period.</param>
-        /// <param name="pm2.5">Restricted. A list of PM2.5 values. Concentration of airborne particulate matter (PM) with aerodynamicdiameter less than 10 microns. [g/m^3] HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.</param>
+        /// <param name="timeZone">Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset. Default is utc.</param>
+        /// <param name="hours">The number of hours to return in the response. Default is 24.</param>
+        /// <param name="period">Length of the averaging period in ISO 8601 format. Default is PT30M.</param>
+        /// <param name="depoVelocPm10">Deposition or settling velocity of PM2.5 particulates. [m/s]. Default is 0.0009.</param>
+        /// <param name="depoVelocPm25">Deposition or settling velocity of PM10 particulates. [m/s]. Default is 0.004.</param>
+        /// <param name="pm10">Restricted. A list of PM10 values. Concentration of airborne particulate matter (PM) with aerodynamicdiameter less than 10 microns. [g/m^3]. HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.</param>
+        /// <param name="pm25">Restricted. Concentration of airborne particulate matter (PM) with aerodynamic diameter less than 2.5 microns. [g/m^3]. HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.</param>
         /// <param name="tilt">The angle (degrees) that the PV system is tilted off the horizontal. A tilt of 0 means the system faces directly upwards, and 90 means the system is vertical and facing the horizon. If you don't specify tilt, we use a default tilt angle based on the latitude you specify in your request. Must be between 0 and 90.</param>
-        /// <param name="cleaningThreshold">Amount of daily rainfall required to clean the panels (mm). Defaults to 6.0mm</param>
-        /// <param name="initialSoiling">Initial percentage of energy lost due to soiling at time zero in the rainfall series input. If not provided, Solcast will perform a ramp up series calculation to accurately determine this value.</param>
+        /// <param name="cleaningThreshold">Amount of daily rainfall required to clean the panels (mm). Default is 6.0.</param>
+        /// <param name="initialSoiling">Initial percentage of energy lost due to soiling at time zero in the rainfall series input. If not provided, Solcast will perform a ramp up series calculation to accurately determine this value. If provided must be >= 0 and < 0.3437.</param>
         /// <param name="rainAccumPeriod">Restricted. Specifies the period of time to sum rain fall data. Internally this value is set to 24 hours in line with the findings of https://ieeexplore.ieee.org/document/4060159 .</param>
         /// <param name="rainfall">Restricted. List of rainfall values. HSU endpoint will internally use Solcast's percepitation rate values tailored to your request time period.</param>
-        /// <param name="manualWashDates">A list of ISO 8601 compliant dates or a repeating interval when manual cleaning of the panels occurred.</param>
-        /// <param name="format">Response format</param>
+        /// <param name="manualWashDates">A list of ISO_8601 compliant dates or a repeating interval when manual cleaning of the panels occurred. A list of dates example: [2025-01-01,2025-01-05,2025-01-10]. A repeating interval example: R3/2025-01-01T00:00:00Z/P14D. Wash dates outside of the start and end of the request are discarded.</param>
+        /// <param name="format">Response format (json, csv). Default is json.</param>
         public async Task<ApiResponse<ForecastsDataResponse>> GetForecastHsu(
             double? latitude,
             double? longitude,
@@ -398,9 +398,9 @@ Error: {ex.Message}", ex);
             int? hours = null,
             string period = null,
             double? depoVelocPm10 = null,
-            double? depoVelocPm2.5 = null,
+            double? depoVelocPm25 = null,
             List<double?> pm10 = null,
-            List<double?> pm2.5 = null,
+            List<double?> pm25 = null,
             double? tilt = null,
             double? cleaningThreshold = null,
             double? initialSoiling = null,
@@ -419,9 +419,9 @@ Error: {ex.Message}", ex);
                 if (hours.HasValue) parameters.Add("hours", hours.Value.ToString());
                 if (period != null) parameters.Add("period", period.ToString());
                 if (depoVelocPm10.HasValue) parameters.Add("depoVelocPm10", depoVelocPm10.Value.ToString());
-                if (depoVelocPm2.5.HasValue) parameters.Add("depoVelocPm2.5", depoVelocPm2.5.Value.ToString());
+                if (depoVelocPm25.HasValue) parameters.Add("depoVelocPm25", depoVelocPm25.Value.ToString());
                 if (pm10 != null) parameters.Add("pm10", pm10.ToString());
-                if (pm2.5 != null) parameters.Add("pm2.5", pm2.5.ToString());
+                if (pm25 != null) parameters.Add("pm25", pm25.ToString());
                 if (tilt.HasValue) parameters.Add("tilt", tilt.Value.ToString());
                 if (cleaningThreshold.HasValue) parameters.Add("cleaningThreshold", cleaningThreshold.Value.ToString());
                 if (initialSoiling.HasValue) parameters.Add("initialSoiling", initialSoiling.Value.ToString());
@@ -462,7 +462,7 @@ Error: {ex.Message}", ex);
             }
             catch (HttpRequestException httpEx)
             {
-                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "timeZone=" + timeZone + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "depoVelocPm10=" + depoVelocPm10 + ", " + "depoVelocPm2.5=" + depoVelocPm2.5 + ", " + "pm10=" + pm10 + ", " + "pm2.5=" + pm2.5 + ", " + "tilt=" + tilt + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "initialSoiling=" + initialSoiling + ", " + "rainAccumPeriod=" + rainAccumPeriod + ", " + "rainfall=" + rainfall + ", " + "manualWashDates=" + manualWashDates + ", " + "format=" + format;
+                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "timeZone=" + timeZone + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "depoVelocPm10=" + depoVelocPm10 + ", " + "depoVelocPm25=" + depoVelocPm25 + ", " + "pm10=" + pm10 + ", " + "pm25=" + pm25 + ", " + "tilt=" + tilt + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "initialSoiling=" + initialSoiling + ", " + "rainAccumPeriod=" + rainAccumPeriod + ", " + "rainfall=" + rainfall + ", " + "manualWashDates=" + manualWashDates + ", " + "format=" + format;
                 var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
                 var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
                 throw new Exception($@"HTTP error in GetForecastHsu
@@ -473,7 +473,7 @@ Error: {httpEx.Message}", httpEx);
             }
             catch (Exception ex)
             {
-                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "timeZone=" + timeZone + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "depoVelocPm10=" + depoVelocPm10 + ", " + "depoVelocPm2.5=" + depoVelocPm2.5 + ", " + "pm10=" + pm10 + ", " + "pm2.5=" + pm2.5 + ", " + "tilt=" + tilt + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "initialSoiling=" + initialSoiling + ", " + "rainAccumPeriod=" + rainAccumPeriod + ", " + "rainfall=" + rainfall + ", " + "manualWashDates=" + manualWashDates + ", " + "format=" + format;
+                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "timeZone=" + timeZone + ", " + "hours=" + hours + ", " + "period=" + period + ", " + "depoVelocPm10=" + depoVelocPm10 + ", " + "depoVelocPm25=" + depoVelocPm25 + ", " + "pm10=" + pm10 + ", " + "pm25=" + pm25 + ", " + "tilt=" + tilt + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "initialSoiling=" + initialSoiling + ", " + "rainAccumPeriod=" + rainAccumPeriod + ", " + "rainfall=" + rainfall + ", " + "manualWashDates=" + manualWashDates + ", " + "format=" + format;
                 throw new Exception($@"Unhandled error in GetForecastHsu
 Parameters: {paramDetails}
 Error: {ex.Message}", ex);
@@ -481,16 +481,16 @@ Error: {ex.Message}", ex);
         }
         /// <param name="latitude">The latitude of the location you request data for. Must be a decimal number between -90 and 90.</param>
         /// <param name="longitude">The longitude of the location you request data for. Must be a decimal number between -180 and 180.</param>
-        /// <param name="timeZone">Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset.</param>
-        /// <param name="hours">The number of hours to return in the response.</param>
-        /// <param name="period">Length of the averaging period in ISO 8601 format.</param>
-        /// <param name="cleaningThreshold">Amount of daily rainfall required to clean the panels (mm)</param>
+        /// <param name="timeZone">Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset. Default is utc.</param>
+        /// <param name="hours">The number of hours to return in the response. Default is 24.</param>
+        /// <param name="period">Length of the averaging period in ISO 8601 format. Default is PT30M.</param>
+        /// <param name="cleaningThreshold">Amount of daily rainfall required to clean the panels (mm). Default is 6.0.</param>
         /// <param name="soilingLossRate">Percentage of energy lost due to one day of soiling.</param>
         /// <param name="gracePeriod">Number of days after a rainfall event when it’s assumed the ground is damp, and so it’s assumed there is no soiling.</param>
         /// <param name="maxSoiling">Maximum percentage of energy lost due to soiling. Soiling will build up until this value.</param>
-        /// <param name="initialSoiling">Initial percentage of energy lost due to soiling at time zero in the rainfall series input.</param>
-        /// <param name="manualWashDates">A list of ISO 8601 compliant dates or a repeating interval when manual cleaning of the panels occurred.</param>
-        /// <param name="format">Response format</param>
+        /// <param name="initialSoiling">Initial percentage of energy lost due to soiling at time zero in the rainfall series input. If not provided, Solcast will perform a ramp up series calculation to accurately determine this value.</param>
+        /// <param name="manualWashDates">A list of ISO_8601 compliant dates or a repeating interval when manual cleaning of the panels occurred. A list of dates example: [2025-01-01,2025-01-05,2025-01-10]. A repeating interval example: R3/2025-01-01T00:00:00Z/P14D. Wash dates outside of the start and end of the request are discarded.</param>
+        /// <param name="format">Response format (json, csv). Default is json.</param>
         public async Task<ApiResponse<ForecastsDataResponse>> GetForecastKimber(
             double? latitude,
             double? longitude,
