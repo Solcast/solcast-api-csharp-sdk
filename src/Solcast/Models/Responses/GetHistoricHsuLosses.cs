@@ -18,37 +18,37 @@ namespace Solcast.Models
         public double? Longitude { get; set; } // Required
 
         /// <summary>
-        /// Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset.
+        /// Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset. Default is utc.
         /// </summary>
         [JsonProperty("time_zone")]
         public string TimeZone { get; set; }
 
         /// <summary>
-        /// Length of the averaging period in ISO 8601 format.
+        /// Length of the averaging period in ISO 8601 format. Default is PT30M.
         /// </summary>
         [JsonProperty("period")]
         public string Period { get; set; }
 
         /// <summary>
-        /// Deposition Velocity for PM10.
+        /// Deposition or settling velocity of PM2.5 particulates. [m/s]. Default is 0.0009.
         /// </summary>
         [JsonProperty("depo_veloc_pm10")]
         public double? DepoVelocPm10 { get; set; }
 
         /// <summary>
-        /// Deposition Velocity for PM2.5.
+        /// Deposition or settling velocity of PM10 particulates. [m/s]. Default is 0.004.
         /// </summary>
         [JsonProperty("depo_veloc_pm2.5")]
         public double? DepoVelocPm2.5 { get; set; }
 
         /// <summary>
-        /// Restricted. A list of PM10 values. Concentration of airborne particulate matter (PM) with aerodynamicdiameter less than 10 microns. [g/m^3] HSU endpoint will internally use Solcast's PM10 values tailored to your request time period.
+        /// Restricted. A list of PM10 values. Concentration of airborne particulate matter (PM) with aerodynamicdiameter less than 10 microns. [g/m^3]. HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.
         /// </summary>
         [JsonProperty("pm10")]
         public List<double?> Pm10 { get; set; }
 
         /// <summary>
-        /// Restricted. A list of PM2.5 values. Concentration of airborne particulate matter (PM) with aerodynamicdiameter less than 10 microns. [g/m^3] HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.
+        /// Restricted. Concentration of airborne particulate matter (PM) with aerodynamic diameter less than 2.5 microns. [g/m^3]. HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.
         /// </summary>
         [JsonProperty("pm2.5")]
         public List<double?> Pm2.5 { get; set; }
@@ -78,19 +78,19 @@ namespace Solcast.Models
         public string End { get; set; }
 
         /// <summary>
-        /// Amount of daily rainfall required to clean the panels (mm)
+        /// Amount of daily rainfall required to clean the panels (mm). Default is 6.0.
         /// </summary>
         [JsonProperty("cleaning_threshold")]
         public double? CleaningThreshold { get; set; }
 
         /// <summary>
-        /// Initial percentage of energy lost due to soiling at time zero in the rainfall series input. If not provided, Solcast will perform a ramp up series calculation to accurately determine this value.
+        /// Initial percentage of energy lost due to soiling at time zero in the rainfall series input. If not provided, Solcast will perform a ramp up series calculation to accurately determine this value. If provided must be >= 0 and < 0.3437.
         /// </summary>
         [JsonProperty("initial_soiling")]
         public double? InitialSoiling { get; set; }
 
         /// <summary>
-        /// A list of ISO 8601 compliant dates or a repeating interval when manual cleaning of the panels occurred.
+        /// A list of ISO_8601 compliant dates or a repeating interval when manual cleaning of the panels occurred. A list of dates example: [2025-01-01,2025-01-05,2025-01-10]. A repeating interval example: R3/2025-01-01T00:00:00Z/P14D. Wash dates outside of the start and end of the request are discarded.
         /// </summary>
         [JsonProperty("manual_wash_dates")]
         public List<string> ManualWashDates { get; set; }

@@ -18,13 +18,13 @@ namespace Solcast.Models
         public double? Longitude { get; set; } // Required
 
         /// <summary>
-        /// Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset.
+        /// Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset. Default is utc.
         /// </summary>
         [JsonProperty("time_zone")]
         public string TimeZone { get; set; }
 
         /// <summary>
-        /// Length of the averaging period in ISO 8601 format.
+        /// Length of the averaging period in ISO 8601 format. Default is PT30M.
         /// </summary>
         [JsonProperty("period")]
         public string Period { get; set; }
@@ -48,7 +48,7 @@ namespace Solcast.Models
         public string End { get; set; }
 
         /// <summary>
-        /// Amount of daily rainfall required to clean the panels (mm)
+        /// Amount of daily rainfall required to clean the panels (mm). Default is 6.0.
         /// </summary>
         [JsonProperty("cleaning_threshold")]
         public double? CleaningThreshold { get; set; }
@@ -72,19 +72,19 @@ namespace Solcast.Models
         public double? MaxSoiling { get; set; }
 
         /// <summary>
-        /// Initial percentage of energy lost due to soiling at time zero in the rainfall series input.
+        /// Initial percentage of energy lost due to soiling at time zero in the rainfall series input. If not provided, Solcast will perform a ramp up series calculation to accurately determine this value.
         /// </summary>
         [JsonProperty("initial_soiling")]
         public double? InitialSoiling { get; set; }
 
         /// <summary>
-        /// A list of ISO 8601 compliant dates or a repeating interval when manual cleaning of the panels occurred.
+        /// A list of ISO_8601 compliant dates or a repeating interval when manual cleaning of the panels occurred. A list of dates example: [2025-01-01,2025-01-05,2025-01-10]. A repeating interval example: R3/2025-01-01T00:00:00Z/P14D. Wash dates outside of the start and end of the request are discarded.
         /// </summary>
         [JsonProperty("manual_wash_dates")]
         public List<string> ManualWashDates { get; set; }
 
         /// <summary>
-        /// Response format
+        /// Response format (json, csv). Default is json.
         /// </summary>
         [JsonProperty("format")]
         public string Format { get; set; }
