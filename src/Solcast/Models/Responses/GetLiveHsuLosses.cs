@@ -45,7 +45,7 @@ namespace Solcast.Models
         /// Deposition or settling velocity of PM10 particulates. [m/s]. Default is 0.004.
         /// </summary>
         [JsonProperty("depo_veloc_pm2.5")]
-        public double? DepoVelocPm2.5 { get; set; }
+        public double? DepoVelocPm2_5 { get; set; }
 
         /// <summary>
         /// Restricted. A list of PM10 values. Concentration of airborne particulate matter (PM) with aerodynamicdiameter less than 10 microns. [g/m^3]. HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.
@@ -57,7 +57,7 @@ namespace Solcast.Models
         /// Restricted. Concentration of airborne particulate matter (PM) with aerodynamic diameter less than 2.5 microns. [g/m^3]. HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.
         /// </summary>
         [JsonProperty("pm2.5")]
-        public List<double?> Pm2.5 { get; set; }
+        public List<double?> Pm2_5 { get; set; }
 
         /// <summary>
         /// The angle (degrees) that the PV system is tilted off the horizontal. A tilt of 0 means the system faces directly upwards, and 90 means the system is vertical and facing the horizon. If you don't specify tilt, we use a default tilt angle based on the latitude you specify in your request. Must be between 0 and 90.
