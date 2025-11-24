@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://solcast.github.io/solcast-api-csharp-sdk/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast-api-csharp-sdk/aggregation/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast-api-csharp-sdk/forecast/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast-api-csharp-sdk/historic/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast-api-csharp-sdk/live/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast-api-csharp-sdk/pvpowersite/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast-api-csharp-sdk/tmy/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+    <url>
+         <loc>https://solcast.github.io/solcast-api-csharp-sdk/notebooks/1.1%20Getting%20Data%20-%20Historic%20Solar%20Radiation/</loc>
+         <lastmod>2025-11-24</lastmod>
+    </url>
+</urlset>
