@@ -334,9 +334,9 @@ Error: {ex.Message}", ex);
         /// <param name="timeZone">Timezone to return in data set. Accepted values are utc, longitudinal, or a range from -13 to 13 in 0.25 hour increments for utc offset. Default is utc.</param>
         /// <param name="period">Length of the averaging period in ISO 8601 format. Default is PT30M.</param>
         /// <param name="depoVelocPm10">Deposition or settling velocity of PM2.5 particulates. [m/s]. Default is 0.0009.</param>
-        /// <param name="depoVelocPm2_5">Deposition or settling velocity of PM10 particulates. [m/s]. Default is 0.004.</param>
+        /// <param name="depoVelocPm2.5">Deposition or settling velocity of PM10 particulates. [m/s]. Default is 0.004.</param>
         /// <param name="pm10">Restricted. A list of PM10 values. Concentration of airborne particulate matter (PM) with aerodynamicdiameter less than 10 microns. [g/m^3]. HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.</param>
-        /// <param name="pm2_5">Restricted. Concentration of airborne particulate matter (PM) with aerodynamic diameter less than 2.5 microns. [g/m^3]. HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.</param>
+        /// <param name="pm2.5">Restricted. Concentration of airborne particulate matter (PM) with aerodynamic diameter less than 2.5 microns. [g/m^3]. HSU endpoint will internally use Solcast's PM2.5 values tailored to your request time period.</param>
         /// <param name="tilt">The angle (degrees) that the PV system is tilted off the horizontal. A tilt of 0 means the system faces directly upwards, and 90 means the system is vertical and facing the horizon. If you don't specify tilt, we use a default tilt angle based on the latitude you specify in your request. Must be between 0 and 90.</param>
         /// <param name="start">ISO_8601 compliant starting datetime for the historical data. If the supplied value does not specify a timezone, the timezone will be inferred from the time_zone parameter, if supplied. Otherwise UTC is assumed.</param>
         /// <param name="duration">Must include one of end_date and duration. ISO_8601 compliant duration for the historical data. Must be within 31 days of the start_date.</param>
@@ -354,9 +354,9 @@ Error: {ex.Message}", ex);
             string timeZone = null,
             string period = null,
             double? depoVelocPm10 = null,
-            double? depoVelocPm2_5 = null,
+            double? depoVelocPm2.5 = null,
             List<double?> pm10 = null,
-            List<double?> pm2_5 = null,
+            List<double?> pm2.5 = null,
             double? tilt = null,
             string duration = null,
             string end = null,
@@ -377,9 +377,9 @@ Error: {ex.Message}", ex);
                 if (timeZone != null) parameters.Add("timeZone", timeZone.ToString());
                 if (period != null) parameters.Add("period", period.ToString());
                 if (depoVelocPm10.HasValue) parameters.Add("depoVelocPm10", depoVelocPm10.Value.ToString());
-                if (depoVelocPm2_5.HasValue) parameters.Add("depoVelocPm2.5", depoVelocPm2_5.Value.ToString());
-                if (pm10 != null && pm10.Any()) parameters.Add("pm10", string.Join(",", pm10));
-                if (pm2_5 != null && pm2_5.Any()) parameters.Add("pm2.5", string.Join(",", pm2_5));
+                if (depoVelocPm2.5.HasValue) parameters.Add("depoVelocPm2.5", depoVelocPm2.5.Value.ToString());
+                if (pm10 != null) parameters.Add("pm10", pm10.ToString());
+                if (pm2.5 != null) parameters.Add("pm2.5", pm2.5.ToString());
                 if (tilt.HasValue) parameters.Add("tilt", tilt.Value.ToString());
                 if (duration != null) parameters.Add("duration", duration.ToString());
                 if (end != null) parameters.Add("end", end.ToString());
@@ -387,7 +387,7 @@ Error: {ex.Message}", ex);
                 if (initialSoiling.HasValue) parameters.Add("initialSoiling", initialSoiling.Value.ToString());
                 if (manualWashDates != null && manualWashDates.Any()) parameters.Add("manualWashDates", string.Join(",", manualWashDates));
                 if (rainAccumPeriod.HasValue) parameters.Add("rainAccumPeriod", rainAccumPeriod.Value.ToString());
-                if (rainfall != null && rainfall.Any()) parameters.Add("rainfall", string.Join(",", rainfall));
+                if (rainfall != null) parameters.Add("rainfall", rainfall.ToString());
                 if (format != null) parameters.Add("format", format.ToString());
 
                 var queryString = string.Join("&", parameters.Select(p => $"{p.Key}={Uri.EscapeDataString(p.Value ?? string.Empty)}"));
@@ -422,7 +422,7 @@ Error: {ex.Message}", ex);
             }
             catch (HttpRequestException httpEx)
             {
-                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "start=" + start + ", " + "timeZone=" + timeZone + ", " + "period=" + period + ", " + "depoVelocPm10=" + depoVelocPm10 + ", " + "depoVelocPm2_5=" + depoVelocPm2_5 + ", " + "pm10=" + pm10 + ", " + "pm2_5=" + pm2_5 + ", " + "tilt=" + tilt + ", " + "duration=" + duration + ", " + "end=" + end + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "initialSoiling=" + initialSoiling + ", " + "manualWashDates=" + manualWashDates + ", " + "rainAccumPeriod=" + rainAccumPeriod + ", " + "rainfall=" + rainfall + ", " + "format=" + format;
+                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "start=" + start + ", " + "timeZone=" + timeZone + ", " + "period=" + period + ", " + "depoVelocPm10=" + depoVelocPm10 + ", " + "depoVelocPm2.5=" + depoVelocPm2.5 + ", " + "pm10=" + pm10 + ", " + "pm2.5=" + pm2.5 + ", " + "tilt=" + tilt + ", " + "duration=" + duration + ", " + "end=" + end + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "initialSoiling=" + initialSoiling + ", " + "manualWashDates=" + manualWashDates + ", " + "rainAccumPeriod=" + rainAccumPeriod + ", " + "rainfall=" + rainfall + ", " + "format=" + format;
                 var status = httpEx.StatusCode.HasValue ? ((int)httpEx.StatusCode).ToString() : "unknown";
                 var content = httpEx.Data.Contains("Content") ? httpEx.Data["Content"] : "no content";
                 throw new Exception($@"HTTP error in GetHistoricHsu
@@ -433,7 +433,7 @@ Error: {httpEx.Message}", httpEx);
             }
             catch (Exception ex)
             {
-                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "start=" + start + ", " + "timeZone=" + timeZone + ", " + "period=" + period + ", " + "depoVelocPm10=" + depoVelocPm10 + ", " + "depoVelocPm2_5=" + depoVelocPm2_5 + ", " + "pm10=" + pm10 + ", " + "pm2_5=" + pm2_5 + ", " + "tilt=" + tilt + ", " + "duration=" + duration + ", " + "end=" + end + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "initialSoiling=" + initialSoiling + ", " + "manualWashDates=" + manualWashDates + ", " + "rainAccumPeriod=" + rainAccumPeriod + ", " + "rainfall=" + rainfall + ", " + "format=" + format;
+                var paramDetails = "latitude=" + latitude + ", " + "longitude=" + longitude + ", " + "start=" + start + ", " + "timeZone=" + timeZone + ", " + "period=" + period + ", " + "depoVelocPm10=" + depoVelocPm10 + ", " + "depoVelocPm2.5=" + depoVelocPm2.5 + ", " + "pm10=" + pm10 + ", " + "pm2.5=" + pm2.5 + ", " + "tilt=" + tilt + ", " + "duration=" + duration + ", " + "end=" + end + ", " + "cleaningThreshold=" + cleaningThreshold + ", " + "initialSoiling=" + initialSoiling + ", " + "manualWashDates=" + manualWashDates + ", " + "rainAccumPeriod=" + rainAccumPeriod + ", " + "rainfall=" + rainfall + ", " + "format=" + format;
                 throw new Exception($@"Unhandled error in GetHistoricHsu
 Parameters: {paramDetails}
 Error: {ex.Message}", ex);
