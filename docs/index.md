@@ -1,68 +1,53 @@
-# Welcome to Solcast
+# Solcast API
 
-C# SDK that wraps [Solcast's API](https://docs.solcast.com.au/).
+The Solcast API provides forecast, live and historical solar irradiance, PV power and weather data.
 
-## Install
+For full details of the API, see the [OpenAPI specification](https://dev-api.solcast.com.au/openapi)
 
-To install the SDK, add the package to your project using the following command:
+## Installation
 
 ```bash
 dotnet add package Solcast
 ```
 
-## Usage
-!!! warning 
+## Configuration
 
-    To access Solcast data you will need a [commercial API key](https://toolkit.solcast.com.au/register). If you have the API key already, you can use it with this library either as an environment variable called SOLCAST_API_KEY, or you can pass it as an argument `api_key` when you call one of the library's methods. 
+Get an API key from the [Solcast API Toolkit](https://toolkit.solcast.com.au/), then set it:
 
-Fetching Live Radiation and Weather Data:
-```csharp
-using Solcast.Clients;
-
-var liveClient = new LiveClient();
-var response = await liveClient.GetLiveRadiationAndWeather(
-    latitude: -33.856784,
-    longitude: 151.215297,
-    outputParameteres: ["air_temp", "dni", "ghi" ]
-);
+```bash
+export SOLCAST_API_KEY=your-api-key
 ```
 
-!!! tip
+## Getting started
 
-    When testing or developing, you should use `solcast.unmetered_locations` so that your usage isn't counted against your plan.
+This example calls the Sydney Opera House, one of Solcast's unmetered locations, so you can run it as
+it stands without using your request quota.
 
-[Unmetered Locations](https://docs.solcast.com.au/#unmetered-locations) still require you to signup for a commercial API key (above).
 ```csharp
-using Solcast.Clients;
+using Solcast;
 
-var location = UnmeteredLocations.Locations["Sydney Opera House"];
+var client = SolcastClientFactory.Create();
 
-var forecastClient = new ForecastClient();
+var response = await client.Data.Live.Radiation_and_weather.GetAsync(request =>
+{
+    request.QueryParameters.OutputParameters = ["air_temp", "dni", "ghi"];
+    request.QueryParameters.Latitude = -33.856784;
+    request.QueryParameters.Longitude = 151.215297;
+});
 
-var response = await forecastClient.GetForecastRooftopPvPower(
-    latitude: location.Latitude,
-    longitude: location.Longitude,
-    outputParameters: ["pv_power_rooftop"],
-    period: "PT5M",
-    capacity: 5,
-    tilt: 22,
-    format: "csv"
-);
+foreach (var record in response!.EstimatedActuals!)
+{
+    Console.WriteLine($"{record.PeriodEnd}: {record.Ghi}");
+}
 ```
 
+## Endpoint reference
 
-For more detailed documentation, visit the following pages:
-
-| Module           | API Docs                                 |
-|------------------|------------------------------------------|
-| `Live`           | [Solcast.Clients.LiveClient](live.md) |
-| `Historic`       | [Solcast.Clients.HistoricClient](historic.md) |
-| `Forecast`       | [Solcast.Clients.ForecastClient](forecast.md) |
-| `TMY`            | [Solcast.Clients.TmyClient](tmy.md) |
-| `PV Power Sites` | [Solcast.Clients.PvPowerSiteClient](pvpowersite.md) |
-| `Aggregations`   | [Solcast.Clients.AggregationClient](aggregation.md) |
-
-
-## API Documentation
-For more detailed information about the Solcast API, please visit the official [API documentation](http://docs.solcast.com.au).
-
+- [Forecast](forecast.md)
+- [Geographic](geographic.md)
+- [Grid Aggregations](grid_aggregations.md)
+- [Historic](historic.md)
+- [Live](live.md)
+- [Resources](resources.md)
+- [Schedule](schedule.md)
+- [TMY](tmy.md)
