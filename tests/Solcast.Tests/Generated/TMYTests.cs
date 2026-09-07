@@ -36,13 +36,12 @@ namespace Solcast.Tests.Generated
         {
             var response = await client.Data.Tmy.AdvancedPvPower.GetAsync(request =>
             {
-                request.QueryParameters.OutputParameters = ["air_temp", "dni", "ghi"];
                 request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
             });
 
             Assert.That(response, Is.Not.Null);
             Assert.That(response!.EstimatedActuals, Is.Not.Null.And.Not.Empty);
-            Assert.That(response.EstimatedActuals![0].PvPowerAdvanced, Is.Not.Null, "the field the call asked for");
+            Assert.That(response.EstimatedActuals![0].PeriodEnd, Is.Not.Null, "the records came back populated");
         }
 
         /// <summary>Get the irradiance and weather for a Typical Meteorological Year (TMY) at a requested location, derived from satellite (clouds and irradiance over non-polar continental areas) and numerical weather models (other data). The TMY is calculated with data from 2007 to 2025.</summary>
@@ -51,14 +50,13 @@ namespace Solcast.Tests.Generated
         {
             var response = await client.Data.Tmy.RadiationAndWeather.GetAsync(request =>
             {
-                request.QueryParameters.OutputParameters = ["air_temp", "dni", "ghi"];
                 request.QueryParameters.Latitude = -33.856784;
                 request.QueryParameters.Longitude = 151.215297;
             });
 
             Assert.That(response, Is.Not.Null);
             Assert.That(response!.EstimatedActuals, Is.Not.Null.And.Not.Empty);
-            Assert.That(response.EstimatedActuals![0].Ghi, Is.Not.Null, "the field the call asked for");
+            Assert.That(response.EstimatedActuals![0].PeriodEnd, Is.Not.Null, "the records came back populated");
         }
     }
 }

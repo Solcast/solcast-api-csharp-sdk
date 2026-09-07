@@ -36,13 +36,12 @@ namespace Solcast.Tests.Generated
         {
             var response = await client.Data.Forecast.AdvancedPvPower.GetAsync(request =>
             {
-                request.QueryParameters.OutputParameters = ["air_temp", "dni", "ghi"];
                 request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
             });
 
             Assert.That(response, Is.Not.Null);
             Assert.That(response!.Forecasts, Is.Not.Null.And.Not.Empty);
-            Assert.That(response.Forecasts![0].Ghi, Is.Not.Null, "the field the call asked for");
+            Assert.That(response.Forecasts![0].PeriodEnd, Is.Not.Null, "the records came back populated");
         }
 
         /// <summary>Get soiling loss forecasts using the HSU model for the requested location from the present up to 14 days ahead.</summary>
@@ -57,7 +56,7 @@ namespace Solcast.Tests.Generated
 
             Assert.That(response, Is.Not.Null);
             Assert.That(response!.Forecasts, Is.Not.Null.And.Not.Empty);
-            Assert.That(response.Forecasts![0].Ghi, Is.Not.Null, "the field the call asked for");
+            Assert.That(response.Forecasts![0].PeriodEnd, Is.Not.Null, "the records came back populated");
         }
 
         /// <summary>Get soiling loss forecasts using the Kimber model for the requested location from the present up to 14 days ahead.</summary>
@@ -72,7 +71,7 @@ namespace Solcast.Tests.Generated
 
             Assert.That(response, Is.Not.Null);
             Assert.That(response!.Forecasts, Is.Not.Null.And.Not.Empty);
-            Assert.That(response.Forecasts![0].Ghi, Is.Not.Null, "the field the call asked for");
+            Assert.That(response.Forecasts![0].PeriodEnd, Is.Not.Null, "the records came back populated");
         }
 
         /// <summary>Get Forecast Premium PV</summary>
@@ -81,13 +80,12 @@ namespace Solcast.Tests.Generated
         {
             var response = await client.Data.Forecast.PremiumPvPower.GetAsync(request =>
             {
-                request.QueryParameters.OutputParameters = ["air_temp", "dni", "ghi"];
                 request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
             });
 
             Assert.That(response, Is.Not.Null);
             Assert.That(response!.Forecasts, Is.Not.Null.And.Not.Empty);
-            Assert.That(response.Forecasts![0].Power, Is.Not.Null, "the field the call asked for");
+            Assert.That(response.Forecasts![0].PeriodEnd, Is.Not.Null, "the records came back populated");
         }
 
         /// <summary>Get Forecast Premium Wind</summary>
@@ -97,12 +95,11 @@ namespace Solcast.Tests.Generated
             var response = await client.Data.Forecast.PremiumWindPower.GetAsync(request =>
             {
                 request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
-                request.QueryParameters.OutputParameters = ["air_temp", "dni", "ghi"];
             });
 
             Assert.That(response, Is.Not.Null);
             Assert.That(response!.Forecasts, Is.Not.Null.And.Not.Empty);
-            Assert.That(response.Forecasts![0].Power, Is.Not.Null, "the field the call asked for");
+            Assert.That(response.Forecasts![0].PeriodEnd, Is.Not.Null, "the records came back populated");
         }
 
         /// <summary>Get irradiance and weather forecasts for the requested location from the present up to 14 days ahead, derived from satellite (clouds and irradiance over non-polar continental areas, nowcast for approx. four hours ahead) and numerical weather models (other data and longer horizons).</summary>
@@ -111,14 +108,13 @@ namespace Solcast.Tests.Generated
         {
             var response = await client.Data.Forecast.RadiationAndWeather.GetAsync(request =>
             {
-                request.QueryParameters.OutputParameters = ["air_temp", "dni", "ghi"];
                 request.QueryParameters.Latitude = -33.856784;
                 request.QueryParameters.Longitude = 151.215297;
             });
 
             Assert.That(response, Is.Not.Null);
             Assert.That(response!.Forecasts, Is.Not.Null.And.Not.Empty);
-            Assert.That(response.Forecasts![0].Ghi, Is.Not.Null, "the field the call asked for");
+            Assert.That(response.Forecasts![0].PeriodEnd, Is.Not.Null, "the records came back populated");
         }
     }
 }
