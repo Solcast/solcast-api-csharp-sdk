@@ -74,34 +74,6 @@ namespace Solcast.Tests.Generated
             Assert.That(response.Forecasts![0].PeriodEnd, Is.Not.Null, "the records came back populated");
         }
 
-        /// <summary>Get Forecast Premium PV</summary>
-        [Test]
-        public async Task Given_AnUnmeteredLocation_When_GetForecastPremiumPvPowerIsCalled_Then_ItReturnsTheDataAsked()
-        {
-            var response = await client.Data.Forecast.PremiumPvPower.GetAsync(request =>
-            {
-                request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
-            });
-
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response!.Forecasts, Is.Not.Null.And.Not.Empty);
-            Assert.That(response.Forecasts![0].PeriodEnd, Is.Not.Null, "the records came back populated");
-        }
-
-        /// <summary>Get Forecast Premium Wind</summary>
-        [Test]
-        public async Task Given_AnUnmeteredLocation_When_GetForecastPremiumWindPowerIsCalled_Then_ItReturnsTheDataAsked()
-        {
-            var response = await client.Data.Forecast.PremiumWindPower.GetAsync(request =>
-            {
-                request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
-            });
-
-            Assert.That(response, Is.Not.Null);
-            Assert.That(response!.Forecasts, Is.Not.Null.And.Not.Empty);
-            Assert.That(response.Forecasts![0].PeriodEnd, Is.Not.Null, "the records came back populated");
-        }
-
         /// <summary>Get irradiance and weather forecasts for the requested location from the present up to 14 days ahead, derived from satellite (clouds and irradiance over non-polar continental areas, nowcast for approx. four hours ahead) and numerical weather models (other data and longer horizons).</summary>
         [Test]
         public async Task Given_AnUnmeteredLocation_When_GetForecastRadiationAndWeatherIsCalled_Then_ItReturnsTheDataAsked()

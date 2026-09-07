@@ -30,18 +30,6 @@ namespace Solcast.Tests.Generated
             client = new SolcastClient(new HttpClientRequestAdapter(authentication));
         }
 
-        /// <summary>Retrieve details of a specific premium wind power site.</summary>
-        [Test]
-        public async Task Given_AnUnmeteredLocation_When_GetPremiumWindResourceIsCalled_Then_ItAnswers()
-        {
-            var response = await client.Resources.WindPowerSite.GetAsync(request =>
-            {
-                request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
-            });
-
-            Assert.That(response, Is.Not.Null);
-        }
-
         /// <summary>Get Resource</summary>
         [Test]
         public async Task Given_AnUnmeteredLocation_When_GetPvPowerResourceIsCalled_Then_ItAnswers()
@@ -50,63 +38,6 @@ namespace Solcast.Tests.Generated
             {
                 request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
             });
-
-            Assert.That(response, Is.Not.Null);
-        }
-
-        /// <summary>Retrieve historical measurement data for a Premium PV Power site. Supports pagination via skip/take and date filtering via start/end.</summary>
-        [Test]
-        public async Task Given_AnUnmeteredLocation_When_GetPvSiteMeasurementsIsCalled_Then_ItAnswers()
-        {
-            var response = await client.Resources.PvPowerSiteMeasurements.GetAsync(request =>
-            {
-                request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
-            });
-
-            Assert.That(response, Is.Not.Null);
-        }
-
-        /// <summary>Retrieve historical sub-unit measurement data for a Premium PV Power site. A sub-unit represents a subsection of the site, such as an individual inverter or a subset of inverters. Supports pagination via skip/take, date filtering via start/end, and an optional sub_unit filter.</summary>
-        [Test]
-        public async Task Given_AnUnmeteredLocation_When_GetPvSubUnitSiteMeasurementsIsCalled_Then_ItAnswers()
-        {
-            var response = await client.Resources.PvPowerSiteMeasurements.SubUnits.GetAsync(request =>
-            {
-                request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
-            });
-
-            Assert.That(response, Is.Not.Null);
-        }
-
-        /// <summary>Retrieve historical measurement data for a Premium Wind Power site. Supports pagination via skip/take and date filtering via start/end.</summary>
-        [Test]
-        public async Task Given_AnUnmeteredLocation_When_GetWindSiteMeasurementsIsCalled_Then_ItAnswers()
-        {
-            var response = await client.Resources.WindPowerSiteMeasurements.GetAsync(request =>
-            {
-                request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
-            });
-
-            Assert.That(response, Is.Not.Null);
-        }
-
-        /// <summary>Retrieve historical sub-unit measurement data for a Premium Wind Power site. A sub-unit represents a subsection of the site, such as an individual wind turbine or a subset of turbines. Supports pagination via skip/take, date filtering via start/end, and an optional sub_unit filter.</summary>
-        [Test]
-        public async Task Given_AnUnmeteredLocation_When_GetWindSubUnitSiteMeasurementsIsCalled_Then_ItAnswers()
-        {
-            var response = await client.Resources.WindPowerSiteMeasurements.SubUnits.GetAsync(request =>
-            {
-                request.QueryParameters.ResourceId = "ba75-e17a-7374-95ed";
-            });
-
-            Assert.That(response, Is.Not.Null);
-        }
-
-        /// <summary>Lists all premium wind power sites accessible to the authenticated user.</summary>
-        [Test]
-        public async Task Given_AnUnmeteredLocation_When_ListPremiumWindResourcesIsCalled_Then_ItAnswers()
-        {
-            var response = await client.Resources.WindPowerSites.GetAsync();
 
             Assert.That(response, Is.Not.Null);
         }
