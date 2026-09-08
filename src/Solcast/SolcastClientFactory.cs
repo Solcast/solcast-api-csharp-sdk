@@ -1,3 +1,5 @@
+// The SDK project does not enable nullable reference types, so this file opts in.
+#nullable enable
 using System;
 using Microsoft.Kiota.Abstractions.Authentication;
 using Microsoft.Kiota.Http.HttpClientLibrary;

@@ -2,16 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
     <Authors>Nikolay Petrov</Authors>
     <PackageId>Solcast</PackageId>
     <Description>C# SDK to access the Solcast API</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/solcast/solcast-api-csharp-sdk</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>solcast;solar;pv;wind;weather;forecast;irradiance</PackageTags>
+
+    <!-- The generated client documents every field and its units. Without this none of it reaches
+         IntelliSense, and CS1591 would warn on the parts Kiota leaves undocumented. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,8 +30,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Kiota.Bundle" Version="2.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
   </ItemGroup>
 
 </Project>
