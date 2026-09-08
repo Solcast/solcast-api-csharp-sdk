@@ -37,7 +37,13 @@ Create a new premium wind power site. Required fields: name, latitude, longitude
 `POST /resources/wind_power_site`
 
 ```csharp
-var response = await client.Resources.WindPowerSite.PostAsync();
+var response = await client.Resources.WindPowerSite.PostAsync(new Solcast.Resources.WindPowerSite.WindPowerSitePostRequestBody
+{
+    Name = name,
+    Latitude = latitude,
+    Longitude = longitude,
+    Capacity = capacity,
+});
 ```
 
 **Returns** `PremiumWindPowerResource`
@@ -67,7 +73,16 @@ Create Resource
 `POST /resources/pv_power_site`
 
 ```csharp
-var response = await client.Resources.PvPowerSite.PostAsync();
+var response = await client.Resources.PvPowerSite.PostAsync(new Solcast.Resources.PvPowerSite.PvPowerSitePostRequestBody
+{
+    Name = name,
+    Latitude = latitude,
+    Longitude = longitude,
+    Capacity = capacity,
+    CapacityDc = capacityDc,
+    TrackingType = trackingType,
+    InstallDate = installDate,
+});
 ```
 
 **Returns** `PvPowerResource`
@@ -114,7 +129,10 @@ Submit measurement data for a Premium PV Power site. Measurements are used for m
 `POST /resources/pv_power_site_measurements`
 
 ```csharp
-var response = await client.Resources.PvPowerSiteMeasurements.PostAsync();
+var response = await client.Resources.PvPowerSiteMeasurements.PostAsync(new Solcast.Resources.PvPowerSiteMeasurements.PvPowerSiteMeasurementsPostRequestBody
+{
+    ResourceId = resourceId,
+});
 ```
 
 **Returns** `CreateSiteMeasurementsResponse`
@@ -126,7 +144,10 @@ Submit sub-unit measurement data for a Premium PV Power site. A sub-unit represe
 `POST /resources/pv_power_site_measurements/sub_units`
 
 ```csharp
-var response = await client.Resources.PvPowerSiteMeasurements.SubUnits.PostAsync();
+var response = await client.Resources.PvPowerSiteMeasurements.SubUnits.PostAsync(new Solcast.Resources.PvPowerSiteMeasurements.SubUnits.SubUnitsPostRequestBody
+{
+    ResourceId = resourceId,
+});
 ```
 
 **Returns** `CreateSiteMeasurementsResponse`
@@ -138,7 +159,10 @@ Submit measurement data for an Advanced PV Power site. You can submit a single m
 `POST /utility_scale_sites/{resource_id}/measurements`
 
 ```csharp
-var response = await client.UtilityScaleSites["{resource_id}"].Measurements.PostAsync();
+var response = await client.UtilityScaleSites["{resource_id}"].Measurements.PostAsync(new Solcast.UtilityScaleSites.Item.Measurements.MeasurementsPostRequestBody
+{
+
+});
 ```
 
 **Parameters**
@@ -163,7 +187,10 @@ Submit measurement data for a Premium Wind Power site. Measurements are used for
 `POST /resources/wind_power_site_measurements`
 
 ```csharp
-var response = await client.Resources.WindPowerSiteMeasurements.PostAsync();
+var response = await client.Resources.WindPowerSiteMeasurements.PostAsync(new Solcast.Resources.WindPowerSiteMeasurements.WindPowerSiteMeasurementsPostRequestBody
+{
+    ResourceId = resourceId,
+});
 ```
 
 **Returns** `CreateSiteMeasurementsResponse`
@@ -175,7 +202,10 @@ Submit sub-unit measurement data for a Premium Wind Power site. A sub-unit repre
 `POST /resources/wind_power_site_measurements/sub_units`
 
 ```csharp
-var response = await client.Resources.WindPowerSiteMeasurements.SubUnits.PostAsync();
+var response = await client.Resources.WindPowerSiteMeasurements.SubUnits.PostAsync(new Solcast.Resources.WindPowerSiteMeasurements.SubUnits.SubUnitsPostRequestBody
+{
+    ResourceId = resourceId,
+});
 ```
 
 **Returns** `CreateSiteMeasurementsResponse`
@@ -581,7 +611,10 @@ Partially update a premium wind power site. Only fields included in the body are
 `PATCH /resources/wind_power_site`
 
 ```csharp
-var response = await client.Resources.WindPowerSite.PatchAsync();
+var response = await client.Resources.WindPowerSite.PatchAsync(new Solcast.Resources.WindPowerSite.WindPowerSitePatchRequestBody
+{
+    ResourceId = resourceId,
+});
 ```
 
 **Returns** `PremiumWindPowerResource`
@@ -611,7 +644,10 @@ Patch Resource
 `PATCH /resources/pv_power_site`
 
 ```csharp
-var response = await client.Resources.PvPowerSite.PatchAsync();
+var response = await client.Resources.PvPowerSite.PatchAsync(new Solcast.Resources.PvPowerSite.PvPowerSitePatchRequestBody
+{
+    ResourceId = resourceId,
+});
 ```
 
 **Returns** `PvPowerResource`
@@ -658,7 +694,14 @@ Full replacement update of a premium wind power site. All fields: resource_id (r
 `PUT /resources/wind_power_site`
 
 ```csharp
-var response = await client.Resources.WindPowerSite.PutAsync();
+var response = await client.Resources.WindPowerSite.PutAsync(new Solcast.Resources.WindPowerSite.WindPowerSitePutRequestBody
+{
+    ResourceId = resourceId,
+    Name = name,
+    Latitude = latitude,
+    Longitude = longitude,
+    Capacity = capacity,
+});
 ```
 
 **Returns** `PremiumWindPowerResource`
@@ -688,7 +731,17 @@ Update Resource
 `PUT /resources/pv_power_site`
 
 ```csharp
-var response = await client.Resources.PvPowerSite.PutAsync();
+var response = await client.Resources.PvPowerSite.PutAsync(new Solcast.Resources.PvPowerSite.PvPowerSitePutRequestBody
+{
+    ResourceId = resourceId,
+    Name = name,
+    Latitude = latitude,
+    Longitude = longitude,
+    Capacity = capacity,
+    CapacityDc = capacityDc,
+    TrackingType = trackingType,
+    InstallDate = installDate,
+});
 ```
 
 **Returns** `PvPowerResource`

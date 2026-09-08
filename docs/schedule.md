@@ -79,7 +79,10 @@ Merge new availability and/or curtailment schedule intervals into the existing s
 `PATCH /manage/schedules`
 
 ```csharp
-var response = await client.Manage.Schedules.PatchAsync();
+var response = await client.Manage.Schedules.PatchAsync(new Solcast.Manage.Schedules.SchedulesPatchRequestBody
+{
+    ResourceId = resourceId,
+});
 ```
 
 **Returns** `PatchResourceScheduleResponse`
